@@ -40,9 +40,16 @@ namespace DumpDNS
                 RenderBottom(ActiveInstructions);
             };
 
+            UpdateBottom += (object? sender, EventArgs e) =>
+            {
+                Render(sender, (Console.BufferWidth, Console.BufferHeight));
+            };
+
             SizeChanged(null, (Console.BufferWidth, Console.BufferHeight));
 
-            while(true)
+            Functionality.Version.StartCheck();
+
+            while (true)
             {
                 Console.Clear();
 
@@ -71,6 +78,7 @@ namespace DumpDNS
         /// </summary>
         public static EventHandler<(int, int)>? Render; // Render whatever is being displayed, needs to be changed
         public static EventHandler<(int, int)>? SizeChanged;
+        public static EventHandler? UpdateBottom; // Updates specifically the bottom bar
 
         public static string For;
         public static BottomInstructions ActiveInstructions;
@@ -183,6 +191,21 @@ namespace DumpDNS
             if (CanSearch) instruction += " | Ctrl+F: Search";
             Console.Write(instruction + new string(' ', LastW - instruction.Length));
             Console.ResetColor();
+
+            // Render the version string, if enabled
+            if(Functionality.Version.IsVisible)
+            {
+                Console.CursorLeft = Console.BufferWidth - Functionality.Version.VersionString.Length;
+                if(Functionality.Version.IsNewVersionAvailable)
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkRed;
+                } else
+                {
+                    Console.BackgroundColor = ConsoleColor.Green;
+                    Console.ForegroundColor = ConsoleColor.Black;
+                }
+                Console.Write(Functionality.Version.VersionString);
+            }
         }
     }
 }

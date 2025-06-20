@@ -5,10 +5,12 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <AssemblyVersion>1.2.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DnsClient" Version="1.8.0" />
+    <PackageReference Include="Octokit" Version="14.0.0" />
   </ItemGroup>
 
 </Project>
