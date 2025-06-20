@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36203.30
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumpDNS", "DumpDNS\DumpDNS.csproj", "{B1E6C952-E545-41DD-850B-4C7136B309AF}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "DumpDNS.Install", "DumpDNS.Install\DumpDNS.Install.vdproj", "{9479F312-F555-5691-AB2E-75AB5B45DE5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumpDNS.Install.Actions", "DumpDNS.Install.Actions\DumpDNS.Install.Actions.csproj", "{BFF14CD8-C9F5-4CD9-9FCA-B2262D176079}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B1E6C952-E545-41DD-850B-4C7136B309AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1E6C952-E545-41DD-850B-4C7136B309AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1E6C952-E545-41DD-850B-4C7136B309AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1E6C952-E545-41DD-850B-4C7136B309AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9479F312-F555-5691-AB2E-75AB5B45DE5D}.Debug|Any CPU.ActiveCfg = Debug
+		{9479F312-F555-5691-AB2E-75AB5B45DE5D}.Release|Any CPU.ActiveCfg = Release
+		{BFF14CD8-C9F5-4CD9-9FCA-B2262D176079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFF14CD8-C9F5-4CD9-9FCA-B2262D176079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFF14CD8-C9F5-4CD9-9FCA-B2262D176079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFF14CD8-C9F5-4CD9-9FCA-B2262D176079}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3DB4B7B-B73A-49ED-98B7-D3515178D057}
+	EndGlobalSection
+EndGlobal
