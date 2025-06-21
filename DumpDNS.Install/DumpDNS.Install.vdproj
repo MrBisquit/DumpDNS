@@ -217,15 +217,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:DumpDNS"
-        "ProductCode" = "8:{EF97ABFD-2088-4453-9413-97F289CE9B95}"
-        "PackageCode" = "8:{A292F5AE-0970-4DC7-8A10-A0AEF585A3AE}"
+        "ProductCode" = "8:{871DC618-8DC3-4C5F-9C74-53F4EA6C8E75}"
+        "PackageCode" = "8:{50350FEC-C892-4A70-8B3A-726049EDA42E}"
         "UpgradeCode" = "8:{F172962A-4181-4391-8506-5B9A346EB751}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.0.0"
+        "ProductVersion" = "8:2.0.1"
         "Manufacturer" = "8:WTDawson"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -739,7 +739,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A49E0FD785DC434A872A6139A0AA4BFD"
             {
-            "SourcePath" = "8:..\\DumpDNS\\obj\\Debug\\net8.0\\apphost.exe"
+            "SourcePath" = "8:..\\DumpDNS\\obj\\Release\\net8.0\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_96CB41E861B14D33972191027AC1B845"
@@ -767,7 +767,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_A9DD51EE013345D983D4A1260A157324"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\DumpDNS.Install.Actions\\obj\\Release\\DumpDNS.Install.Actions.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_96CB41E861B14D33972191027AC1B845"

@@ -29,7 +29,7 @@ namespace DumpDNS.Functionality
             GitHubClient client = new GitHubClient(new ProductHeaderValue("DumpDNS"));
             var release = await client.Repository.Release.GetLatest("MrBisquit", "DumpDNS");
             
-            if(!IsHigher(CurrentVersion, release.TagName))
+            if(IsHigher(CurrentVersion, release.TagName))
             {
                 VersionString = $"{CurrentVersion} < {release.TagName}";
                 IsNewVersionAvailable = true;
