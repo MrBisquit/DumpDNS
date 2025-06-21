@@ -1,6 +1,7 @@
 ﻿using Octokit;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -15,6 +16,7 @@ namespace DumpDNS.Functionality
         public static bool IsVisible = false; // False by default, wait until data is fetched
         public static string VersionString = "...";
         public static bool IsNewVersionAvailable = false;
+        public static bool Unreleased = false;
 
         public static async void StartCheck()
         {
@@ -27,10 +29,14 @@ namespace DumpDNS.Functionality
             GitHubClient client = new GitHubClient(new ProductHeaderValue("DumpDNS"));
             var release = await client.Repository.Release.GetLatest("MrBisquit", "DumpDNS");
             
-            if(IsHigher(CurrentVersion, release.TagName))
+            if(!IsHigher(CurrentVersion, release.TagName))
             {
                 VersionString = $"{CurrentVersion} < {release.TagName}";
                 IsNewVersionAvailable = true;
+            } else if(IsHigher(release.TagName, CurrentVersion))
+            {
+                VersionString = $"Unreleased ({CurrentVersion})";
+                Unreleased = true;
             } else
             {
                 VersionString = CurrentVersion;

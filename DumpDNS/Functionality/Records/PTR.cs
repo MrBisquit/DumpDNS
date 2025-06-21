@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        internal DnsClient.Protocol.PtrRecord[] records = [];
+
         public PTR()
         {
             Headers = new List<string>();
@@ -26,7 +28,7 @@ namespace DumpDNS.Functionality.Records
 
             var lookup = new LookupClient();
             IDnsQueryResponse response = lookup.Query(domain, QueryType.PTR);
-            DnsClient.Protocol.PtrRecord[] records = response.AllRecords.PtrRecords().ToArray();
+            records = response.AllRecords.PtrRecords().ToArray();
 
             foreach (var record in records)
             {
@@ -38,6 +40,22 @@ namespace DumpDNS.Functionality.Records
                     record.PtrDomainName.Original
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.PtrRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}\n";
+                str += $"\tPTR DOMAIN: \t{record.PtrDomainName}";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }

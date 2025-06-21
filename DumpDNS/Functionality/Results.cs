@@ -100,6 +100,14 @@ namespace DumpDNS.Functionality
                     Console.Clear();
                     SelectedType = (Types.DnsRecordType)SwitchGrid.SelectedIndex;
                     Program.Render(this, Dimensions);
+                } else if(key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
+                {
+                    Program.EnableSearchBar(); // Ctrl+F
+                } else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
+                {
+                    Program.Render -= Render;
+                    Program.StartDump(); // Ctrl+D
+                    Program.Render += Render;
                 }
                 Console.Clear();
                 Program.Render(this, Dimensions);
@@ -135,6 +143,15 @@ namespace DumpDNS.Functionality
                 else if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.LeftArrow)
                 {
                     return false;
+                }
+                else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
+                {
+                    Program.EnableSearchBar(); // Ctrl+F
+                } else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
+                {
+                    Program.Render -= Render;
+                    Program.StartDump(); // Ctrl+D
+                    Program.Render += Render;
                 }
                 Console.Clear();
                 Program.Render(this, Dimensions);

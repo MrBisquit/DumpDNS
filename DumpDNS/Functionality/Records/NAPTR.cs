@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        internal DnsClient.Protocol.NAPtrRecord[] records = [];
+
         public NAPTR()
         {
             Headers = new List<string>();
@@ -43,6 +45,26 @@ namespace DumpDNS.Functionality.Records
                     record.Services
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.NAPtrRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tFLAGS: \t{record.Flags}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}\n";
+                str += $"\tORDER: \t{record.Order}\n";
+                str += $"\tPREFEREMCE: \t{record.Preference}\n";
+                str += $"\tREGEX: \t{record.RegularExpression}\n";
+                str += $"\tREPLACEMENT: \t{record.Replacement}\n";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }

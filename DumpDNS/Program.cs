@@ -51,12 +51,16 @@ namespace DumpDNS
 
             while (true)
             {
+                For = "";
+                CanDump = false;
+                Domain = null;
                 Console.Clear();
 
                 // First stage, select a domain
                 Functionality.DomainSelection DomainSelection = Functionality.DomainSelection.Start((LastW, LastH));
                 if (DomainSelection.Success == false) return;
                 For = DomainSelection.Domain.ToString();
+                Domain = DomainSelection.Domain.ToString();
 
                 Console.Clear();
 
@@ -66,6 +70,7 @@ namespace DumpDNS
                 Console.Clear();
 
                 // Last stage, show the results
+                CanDump = true;
                 bool exit = !Functionality.Results.Start(dump, (LastW, LastH));
 
                 if (exit) return;
@@ -79,6 +84,8 @@ namespace DumpDNS
         public static EventHandler<(int, int)>? Render; // Render whatever is being displayed, needs to be changed
         public static EventHandler<(int, int)>? SizeChanged;
         public static EventHandler? UpdateBottom; // Updates specifically the bottom bar
+
+        public static string? Domain;
 
         public static string For;
         public static BottomInstructions ActiveInstructions;
@@ -128,14 +135,31 @@ namespace DumpDNS
 
         public class SearchBar
         {
-            public static char[] AllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.".ToCharArray();
+            public static char[] AllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.=_:; ".ToCharArray();
 
             public StringBuilder Term;
             public int Cursor;
 
+            public Functionality.Search Search;
+            public Functionality.SearchResults Results;
+
+            public SearchBar()
+            {
+                Term = new StringBuilder();
+                Cursor = 0;
+
+                Search = new Functionality.Search();
+                Results = new Functionality.SearchResults();
+            }
+
             public bool StartCycle()
             {
-                return true;
+                Program.Render += Render;
+                while(true)
+                {
+                    Thread.Sleep(10);
+                    return false; // Temporary
+                }
             }
 
             public void Render(object? sender, (int, int) dimensions)
@@ -147,6 +171,7 @@ namespace DumpDNS
         public static SearchBar searchBar;
         public static bool IsSearchBar = false; // Whether or not to display the search bar
         public static bool CanSearch = false;
+        public static bool CanDump = false;
 
         public static bool EnableSearchBar()
         {
@@ -154,6 +179,14 @@ namespace DumpDNS
             IsSearchBar = true;
 
             return searchBar.StartCycle();
+        }
+
+        /// <summary>
+        /// Starts the dump file process
+        /// </summary>
+        public static bool StartDump()
+        {
+            return new Functionality.DumpFile(Domain ?? "NULL", (Console.BufferWidth, Console.BufferHeight)).StartCycle();
         }
 
         /// <summary>
@@ -188,7 +221,8 @@ namespace DumpDNS
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             string instruction = BottomInstructionsDictionary[instructions];
-            if (CanSearch) instruction += " | Ctrl+F: Search";
+            if (CanSearch && false) instruction += " | Ctrl+F: Search"; // Disabled for now
+            if (CanDump) instruction += " | Ctrl+D: Dump";
             Console.Write(instruction + new string(' ', LastW - instruction.Length));
             Console.ResetColor();
 
@@ -199,6 +233,10 @@ namespace DumpDNS
                 if(Functionality.Version.IsNewVersionAvailable)
                 {
                     Console.BackgroundColor = ConsoleColor.DarkRed;
+                } else if(Functionality.Version.Unreleased)
+                {
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.Black;
                 } else
                 {
                     Console.BackgroundColor = ConsoleColor.Green;
@@ -206,6 +244,7 @@ namespace DumpDNS
                 }
                 Console.Write(Functionality.Version.VersionString);
             }
+            Console.ResetColor();
         }
     }
 }

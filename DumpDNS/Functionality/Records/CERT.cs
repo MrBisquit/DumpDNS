@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        internal DnsClient.Protocol.CertRecord[] records = [];
+
         public CERT()
         {
             Headers = new List<string>();
@@ -26,7 +28,7 @@ namespace DumpDNS.Functionality.Records
 
             var lookup = new LookupClient();
             IDnsQueryResponse response = lookup.Query(domain, QueryType.CERT);
-            DnsClient.Protocol.CertRecord[] records = response.AllRecords.CertRecords().ToArray();
+            records = response.AllRecords.CertRecords().ToArray();
 
             foreach (var record in records)
             {
@@ -41,6 +43,25 @@ namespace DumpDNS.Functionality.Records
                     record.PublicKeyAsString
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.CertRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tALGORITHM: \t{record.Algorithm}\n";
+                str += $"\tTYPE: \t\t{record.CertType}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += $"\tKEY TAG: \t{record.KeyTag}\n";
+                str += $"\tPUBLIC KEY: \t{record.PublicKey}\n";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }

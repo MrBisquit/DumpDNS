@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        internal DnsClient.Protocol.AaaaRecord[] records = [];
+
         public AAAA()
         {
             Headers = new List<string>();
@@ -26,7 +28,7 @@ namespace DumpDNS.Functionality.Records
 
             var lookup = new LookupClient();
             IDnsQueryResponse response = lookup.Query(domain, QueryType.AAAA);
-            DnsClient.Protocol.AaaaRecord[] records = response.AllRecords.AaaaRecords().ToArray();
+            records = response.AllRecords.AaaaRecords().ToArray();
 
             foreach (var record in records)
             {
@@ -38,6 +40,22 @@ namespace DumpDNS.Functionality.Records
                     record.InitialTimeToLive.ToString()
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.AaaaRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tIP ADDRESS: \t{record.Address}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }

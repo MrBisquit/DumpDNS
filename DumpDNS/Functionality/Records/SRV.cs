@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        internal DnsClient.Protocol.SrvRecord[] records = [];
+
         public SRV()
         {
             Headers = new List<string>();
@@ -26,7 +28,7 @@ namespace DumpDNS.Functionality.Records
 
             var lookup = new LookupClient();
             IDnsQueryResponse response = lookup.Query(domain, QueryType.SRV);
-            DnsClient.Protocol.SrvRecord[] records = response.AllRecords.SrvRecords().ToArray();
+            records = response.AllRecords.SrvRecords().ToArray();
 
             foreach (var record in records)
             {
@@ -41,6 +43,25 @@ namespace DumpDNS.Functionality.Records
                     record.Weight.ToString()
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.SrvRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}\n";
+                str += $"\tPORT: \t{record.Port}\n";
+                str += $"\tPRIORITY: \t{record.Priority}\n";
+                str += $"\tTARGET: \t{record.Target}\n";
+                str += $"\tWEIGHT: \t{record.Weight}";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }

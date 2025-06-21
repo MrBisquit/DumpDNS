@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        internal DnsClient.Protocol.TlsaRecord[] records = [];
+
         public TLSA()
         {
             Headers = new List<string>();
@@ -26,7 +28,7 @@ namespace DumpDNS.Functionality.Records
 
             var lookup = new LookupClient();
             IDnsQueryResponse response = lookup.Query(domain, QueryType.TLSA);
-            DnsClient.Protocol.TlsaRecord[] records = response.AllRecords.TlsaRecords().ToArray();
+            records = response.AllRecords.TlsaRecords().ToArray();
 
             foreach (var record in records)
             {
@@ -41,6 +43,25 @@ namespace DumpDNS.Functionality.Records
                     record.Selector.ToString()
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.TlsaRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tCERTIFICATE ASSOCIATION DATA: \t{record.CertificateAssociationDataAsString}\n";
+                str += $"\tCERTIFICATE USAGE: \t{record.CertificateUsage}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += $"\tMATCHING TYPE: \t{record.MatchingType}\n";
+                str += $"\tSELECTOR: \t\t{record.Selector}\n";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }

@@ -13,6 +13,8 @@ namespace DumpDNS.Functionality.Records
         public List<string> Headers { get; set; }
         public List<List<string>> Rows { get; set; }
 
+        DnsClient.Protocol.MxRecord[] records = [];
+
         public MX()
         {
             Headers = new List<string>();
@@ -26,7 +28,7 @@ namespace DumpDNS.Functionality.Records
 
             var lookup = new LookupClient();
             IDnsQueryResponse response = lookup.Query(domain, QueryType.MX);
-            DnsClient.Protocol.MxRecord[] records = response.AllRecords.MxRecords().ToArray();
+            records = response.AllRecords.MxRecords().ToArray();
 
             foreach (var record in records)
             {
@@ -39,6 +41,23 @@ namespace DumpDNS.Functionality.Records
                     record.InitialTimeToLive.ToString()
                 });
             }
+        }
+
+        public string Dump()
+        {
+            string str = "";
+            for (int i = 0; i < records.Length; i++)
+            {
+                DnsClient.Protocol.MxRecord record = records[i];
+                str += $"Record {i}\n";
+                str += $"\tEXCHANGE: \t{record.Exchange}\n";
+                str += $"\tDOMAIN: \t{record.DomainName}\n";
+                str += $"\tPREFERENCE: \t{record.Preference}\n";
+                str += $"\tTTL: \t\t{record.TimeToLive}\n";
+                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += "\n\n";
+            }
+            return str;
         }
     }
 }
