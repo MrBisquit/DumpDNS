@@ -52,13 +52,13 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.TlsaRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tCERTIFICATE ASSOCIATION DATA: \t{record.CertificateAssociationDataAsString}\n";
-                str += $"\tCERTIFICATE USAGE: \t{record.CertificateUsage}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
-                str += $"\tMATCHING TYPE: \t{record.MatchingType}\n";
-                str += $"\tSELECTOR: \t\t{record.Selector}\n";
+                str += $"\tCERTIFICATE ASSOCIATION DATA:".PadRight(DumpFile.Padding) + $"{record.CertificateAssociationDataAsString}\n";
+                str += $"\tCERTIFICATE USAGE:".PadRight(DumpFile.Padding) + $"{record.CertificateUsage}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
+                str += $"\tMATCHING TYPE:".PadRight(DumpFile.Padding) + $"{record.MatchingType}\n";
+                str += $"\tSELECTOR:".PadRight(DumpFile.Padding) + $"{record.Selector}\n";
                 str += "\n\n";
             }
             return str;

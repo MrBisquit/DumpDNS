@@ -8,6 +8,8 @@ namespace DumpDNS.Functionality
 {
     public class DumpFile
     {
+        public static int Padding = 15;
+
         public static void CreateDump(string path, string domain)
         {
             FileStream fs = File.Open(path, FileMode.OpenOrCreate);

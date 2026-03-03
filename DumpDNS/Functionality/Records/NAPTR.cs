@@ -54,14 +54,14 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.NAPtrRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tFLAGS: \t{record.Flags}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}\n";
-                str += $"\tORDER: \t{record.Order}\n";
-                str += $"\tPREFEREMCE: \t{record.Preference}\n";
-                str += $"\tREGEX: \t{record.RegularExpression}\n";
-                str += $"\tREPLACEMENT: \t{record.Replacement}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tFLAGS:".PadRight(DumpFile.Padding) + $"{record.Flags}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}\n";
+                str += $"\tORDER:".PadRight(DumpFile.Padding) + $"{record.Order}\n";
+                str += $"\tPREFEREMCE:".PadRight(DumpFile.Padding) + $"{record.Preference}\n";
+                str += $"\tREGEX:".PadRight(DumpFile.Padding) + $"{record.RegularExpression}\n";
+                str += $"\tREPLACEMENT:".PadRight(DumpFile.Padding) + $"{record.Replacement}\n";
                 str += "\n\n";
             }
             return str;

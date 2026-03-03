@@ -46,12 +46,12 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.UriRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
-                str += $"\tPRIORITY: \t{record.Priority}\n";
-                str += $"\tTARGET: \t\t{record.Target}\n";
-                str += $"\tWEIGHT: \t{record.Target}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
+                str += $"\tPRIORITY:".PadRight(DumpFile.Padding) + $"{record.Priority}\n";
+                str += $"\tTARGET:".PadRight(DumpFile.Padding) + $"{record.Target}\n";
+                str += $"\tWEIGHT:".PadRight(DumpFile.Padding) + $"{ record.Target}\n";
                 str += "\n\n";
             }
             return str;

@@ -198,7 +198,7 @@ namespace DumpDNS.Functionality
             Console.CursorTop++;
 
             Console.ResetColor();
-            Console.WriteLine("Type the DNS server you would like to use (leave blank to use your network's DNS server)");
+            Console.WriteLine("Type the DNS server you would like to use (E.g. 1.1.1.1, or 192.168.1.1:53)");
 
             if(Dns.Length > dimensions.Item1)
             {
@@ -209,10 +209,17 @@ namespace DumpDNS.Functionality
             Console.BackgroundColor = DnsSelected ? ConsoleColor.Gray : ConsoleColor.DarkGray;
             Console.WriteLine(new string(' ', dimensions.Item1));
             Console.CursorTop--;
-            Console.ForegroundColor = ConsoleColor.Black;
-            Console.WriteLine(Dns.ToString());
+            if (Dns.Length > 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine(Dns.ToString());
+            } else
+            {
+                Console.ForegroundColor = DnsSelected ? ConsoleColor.DarkGray : ConsoleColor.Gray;
+                Console.WriteLine("Default");
+            }
 
-            Console.CursorLeft = 0;
+                Console.CursorLeft = 0;
             if (DnsValid)
             {
                 Console.BackgroundColor = ConsoleColor.DarkGreen;

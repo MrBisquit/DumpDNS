@@ -52,13 +52,13 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.SrvRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}\n";
-                str += $"\tPORT: \t{record.Port}\n";
-                str += $"\tPRIORITY: \t{record.Priority}\n";
-                str += $"\tTARGET: \t{record.Target}\n";
-                str += $"\tWEIGHT: \t{record.Weight}";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}\n";
+                str += $"\tPORT:".PadRight(DumpFile.Padding) + $"{record.Port}\n";
+                str += $"\tPRIORITY:".PadRight(DumpFile.Padding) + $"{record.Priority}\n";
+                str += $"\tTARGET:".PadRight(DumpFile.Padding) + $"{record.Target}\n";
+                str += $"\tWEIGHT:".PadRight(DumpFile.Padding) + $"{record.Weight}";
                 str += "\n\n";
             }
             return str;

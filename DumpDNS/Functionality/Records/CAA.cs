@@ -51,12 +51,12 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.CaaRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tVALUE: \t\t{record.Value}\n";
-                str += $"\tTAG: \t\t{record.Tag}\n";
-                str += $"\tFLAGS: \t\t{record.Flags}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += $"\tVALUE:".PadRight(DumpFile.Padding) + $"{record.Value}\n";
+                str += $"\tTAG:".PadRight(DumpFile.Padding) + $"{record.Tag}\n";
+                str += $"\tFLAGS:".PadRight(DumpFile.Padding) + $"{record.Flags}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
                 str += "\n\n";
             }
             return str;

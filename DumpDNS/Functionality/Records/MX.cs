@@ -50,11 +50,11 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.MxRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tEXCHANGE: \t{record.Exchange}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tPREFERENCE: \t{record.Preference}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += $"\tEXCHANGE:".PadRight(DumpFile.Padding) + $"{record.Exchange}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tPREFERENCE:".PadRight(DumpFile.Padding) + $"{record.Preference}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
                 str += "\n\n";
             }
             return str;

@@ -49,10 +49,10 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.PtrRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}\n";
-                str += $"\tPTR DOMAIN: \t{record.PtrDomainName}";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}\n";
+                str += $"\tPTR DOMAIN:".PadRight(DumpFile.Padding) + $"{record.PtrDomainName}";
                 str += "\n\n";
             }
             return str;

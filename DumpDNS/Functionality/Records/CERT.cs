@@ -52,13 +52,13 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.CertRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tALGORITHM: \t{record.Algorithm}\n";
-                str += $"\tTYPE: \t\t{record.CertType}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
-                str += $"\tKEY TAG: \t{record.KeyTag}\n";
-                str += $"\tPUBLIC KEY: \t{record.PublicKey}\n";
+                str += $"\tALGORITHM:".PadRight(DumpFile.Padding) + $"{record.Algorithm}\n";
+                str += $"\tTYPE:".PadRight(DumpFile.Padding) + $"{record.CertType}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
+                str += $"\tKEY TAG:".PadRight(DumpFile.Padding) + $"{record.KeyTag}\n";
+                str += $"\tPUBLIC KEY:".PadRight(DumpFile.Padding) + $"{record.PublicKey}\n";
                 str += "\n\n";
             }
             return str;

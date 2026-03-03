@@ -49,10 +49,10 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.AaaaRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tIP ADDRESS: \t{record.Address}\n";
-                str += $"\tDOMAIN: \t{record.DomainName}\n";
-                str += $"\tTTL: \t\t{record.TimeToLive}\n";
-                str += $"\tInitial TTL: \t{record.InitialTimeToLive}";
+                str += $"\tIP ADDRESS:".PadRight(DumpFile.Padding) + $"{record.Address}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
+                str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
+                str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
                 str += "\n\n";
             }
             return str;
