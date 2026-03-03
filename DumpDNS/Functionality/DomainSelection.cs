@@ -25,11 +25,20 @@ namespace DumpDNS.Functionality
         public bool Success = false;
         public bool DomainValid = false;
 
+        public StringBuilder Dns;
+        public int DnsCursor;
+        public bool DnsValid = false;
+
+        public bool DnsSelected = false;
+
         public DomainSelection()
         {
             Domain = new StringBuilder();
+            Dns = new StringBuilder();
             Cursor = 0;
+            DnsCursor = 0;
             CheckValidity();
+            CheckDNSValidity();
         }
 
         /// <summary>
@@ -46,7 +55,10 @@ namespace DumpDNS.Functionality
                     if (key.Key == ConsoleKey.R && key.Modifiers == ConsoleModifiers.Control)
                     {
                         Domain.Clear();
-                        Cursor = 0;
+                        if (DnsSelected)
+                            DnsCursor = 0;
+                        else
+                            Cursor = 0;
                     } else if(key.Key == ConsoleKey.Escape)
                     {
                         Program.Render -= Render;
@@ -54,39 +66,66 @@ namespace DumpDNS.Functionality
                     } else if(key.Key == ConsoleKey.LeftArrow)
                     {
                         if (Cursor == 0) continue;
-                        Cursor--;
+                        if (DnsSelected)
+                            DnsCursor--;
+                        else
+                            Cursor--;
                     } else if(key.Key == ConsoleKey.RightArrow)
                     {
                         if (Cursor == Domain.Length) continue;
-                        Cursor++;
+                        if (DnsSelected)
+                            DnsCursor++;
+                        else
+                            Cursor++;
                     } else if(key.Key == ConsoleKey.Backspace)
                     {
                         if (Domain.Length == 0) continue;
-                        Domain.Remove(Cursor - 1, 1);
-                        Cursor--;
+                        if(DnsSelected)
+                        {
+                            Dns.Remove(DnsCursor - 1, 1);
+                            DnsCursor--;
+                        } else
+                        {
+                            Domain.Remove(Cursor - 1, 1);
+                            Cursor--;
+                        }
                     } else if(key.Key == ConsoleKey.Delete)
                     {
                         if (Cursor == Domain.Length) continue;
-                        Domain.Remove(Cursor, 1);
+                        if (DnsSelected)
+                            Dns.Remove(DnsCursor, 1);
+                        else
+                            Domain.Remove(Cursor, 1);
                     } else if(key.Key == ConsoleKey.Enter)
                     {
-                        if(CheckValidity())
+                        if(CheckValidity() && CheckDNSValidity())
                         {
                             Success = true;
                             Program.Render -= Render;
                             break;
                         }
+                    } else if(key.Key == ConsoleKey.Tab)
+                    {
+                        DnsSelected = !DnsSelected;
                     } else
                     {
-                        if (Domain.Length == 256 || Domain.Length == Dimensions.Item1) continue;
-                        if (AllowedChars.Contains(key.KeyChar))
+                        if(DnsSelected)
                         {
-                            Domain.Insert(Cursor, key.KeyChar);
-                            Cursor++;
+                            Dns.Insert(DnsCursor, key.KeyChar);
+                            DnsCursor++;
+                        } else
+                        {
+                            if (Domain.Length == 256 || Domain.Length == Dimensions.Item1) continue;
+                            if (AllowedChars.Contains(key.KeyChar))
+                            {
+                                Domain.Insert(Cursor, key.KeyChar);
+                                Cursor++;
+                            }
                         }
                     }
 
                     CheckValidity();
+                    CheckDNSValidity();
                     Render(this, Dimensions);
                 }
                 Thread.Sleep(10);
@@ -104,6 +143,15 @@ namespace DumpDNS.Functionality
             if (split.Length <= 1) { DomainValid = false; }
             foreach (string s in split) if(s.Length == 0) { DomainValid = false; break; }
             return DomainValid;
+        }
+
+        public bool CheckDNSValidity()
+        {
+            DnsValid = true;
+            if (Dns.Length == 0)
+                return DnsValid;
+
+            return DnsValid;
         }
 
         /// <summary>
@@ -126,7 +174,7 @@ namespace DumpDNS.Functionality
                 Cursor = 0;
             }
 
-            Console.BackgroundColor = ConsoleColor.Gray;
+            Console.BackgroundColor = !DnsSelected ? ConsoleColor.Gray : ConsoleColor.DarkGray;
             Console.WriteLine(new string(' ', dimensions.Item1));
             Console.CursorTop--;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -146,8 +194,40 @@ namespace DumpDNS.Functionality
                 Console.WriteLine("Invalid domain" + new string(' ', dimensions.Item1 - "Invalid domain".Length));
             }
 
-            Console.CursorTop -= 2;
-            Console.CursorLeft = Cursor;
+            // DNS server
+            Console.CursorTop++;
+
+            Console.ResetColor();
+            Console.WriteLine("Type the DNS server you would like to use (leave blank to use your network's DNS server)");
+
+            if(Dns.Length > dimensions.Item1)
+            {
+                Dns.Clear();
+                Cursor = 0;
+            }
+
+            Console.BackgroundColor = DnsSelected ? ConsoleColor.Gray : ConsoleColor.DarkGray;
+            Console.WriteLine(new string(' ', dimensions.Item1));
+            Console.CursorTop--;
+            Console.ForegroundColor = ConsoleColor.Black;
+            Console.WriteLine(Dns.ToString());
+
+            Console.CursorLeft = 0;
+            if (DnsValid)
+            {
+                Console.BackgroundColor = ConsoleColor.DarkGreen;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Valid IP/DNS" + new string(' ', dimensions.Item1 - "Valid IP/DNS".Length));
+            }
+            else
+            {
+                Console.BackgroundColor = ConsoleColor.DarkRed;
+                Console.ForegroundColor = ConsoleColor.Black;
+                Console.WriteLine("Invalid IP/DNS" + new string(' ', dimensions.Item1 - "Invalid IP/DNS".Length));
+            }
+
+            Console.CursorTop -= DnsSelected ? 2 : 6; // 2
+            Console.CursorLeft = DnsSelected ? DnsCursor : Cursor;
             Console.ResetColor();
         }
     }

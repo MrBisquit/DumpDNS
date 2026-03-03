@@ -16,5 +16,6 @@ namespace DumpDNS.Functionality.Records
         List<List<string>> Rows { get; set; }
         void FetchData(string domain);
         string Dump();
+        int Count();
     }
 }

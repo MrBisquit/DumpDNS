@@ -56,5 +56,7 @@ namespace DumpDNS.Functionality.Records
             }
             return str;
         }
+
+        public int Count() => records.Length;
     }
 }

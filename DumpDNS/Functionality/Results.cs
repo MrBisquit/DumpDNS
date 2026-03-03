@@ -195,7 +195,7 @@ namespace DumpDNS.Functionality
 
                 for (int i = 0; i < Types.RecordTypes.Length; i++)
                 {
-                    SwitchGrid.Rows.Add(new List<string> { Types.RecordTypes[i].ToString() });
+                    SwitchGrid.Rows.Add(new List<string> { Types.RecordTypes[i].ToString().PadRight(10) + $" {Types.IRecords.Values.ToArray()[i].Count()} results" });
                 }
             }
 
