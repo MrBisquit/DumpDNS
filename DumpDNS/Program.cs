@@ -122,7 +122,7 @@ namespace DumpDNS
             [BottomInstructions.ProcessingNoCancel]                 = "No options available",
 
             // With exit
-            [BottomInstructions.TextWithExit]                       = "Enter: Finish | Ctrl+R: Clear | Ctrl+C: Exit",
+            [BottomInstructions.TextWithExit]                       = "Enter: Finish | Tab: Switch | Ctrl+R: Clear | Ctrl+C: Exit",
             [BottomInstructions.OptionsWithExit]                    = "Up/Down/Enter: Select | Ctrl+C: Exit",
             [BottomInstructions.OptionsWithBackWithExit]            = "Up/Down/Enter: Select | Escape/Left: Back | Ctrl+C Exit",
             [BottomInstructions.OptionsWithBackSecondaryWithExit]   = "Up/Down/Enter: Select | Left: Back | Ctrl+C: Exit",

@@ -21,6 +21,12 @@ namespace DumpDNS.Functionality
             {
                 writer.WriteLine($"\t* {Types.DNSRecordTypeDictionary[Types.RecordTypes[i]]}");
             }
+            writer.WriteLine($"* DNS servers (NameServers) used:");
+            var ns = Dump.client.NameServers.ToArray();
+            for (int i = 0; i < ns.Length; i++)
+            {
+                writer.WriteLine($"\t* {ns[i].Address}:{ns[i].Port}\tDNS Suffix: {ns[i].DnsSuffix ?? "N/A"}");
+            }
 
             writer.WriteLine($"\n\n{new string('-', 16)} DUMP CONTENT BEGIN {new string('-', 16)}\n\n");
 
