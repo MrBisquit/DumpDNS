@@ -26,7 +26,7 @@ namespace DumpDNS.Functionality.Records
             Headers = new List<string> { "Algorithm", "Type", "Domain", "TTL", "Initial TTL", "Key Tag", "Public Key" };
             Rows = new List<List<string>>();
 
-            var lookup = new LookupClient();
+            var lookup = Functionality.Dump.client;
             IDnsQueryResponse response = lookup.Query(domain, QueryType.CERT);
             records = response.AllRecords.CertRecords().ToArray();
 

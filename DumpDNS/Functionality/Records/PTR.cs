@@ -26,7 +26,7 @@ namespace DumpDNS.Functionality.Records
             Headers = new List<string> { "Domain", "TTL", "Initial TTL", "PTR Domain" };
             Rows = new List<List<string>>();
 
-            var lookup = new LookupClient();
+            var lookup = Functionality.Dump.client;
             IDnsQueryResponse response = lookup.Query(domain, QueryType.PTR);
             records = response.AllRecords.PtrRecords().ToArray();
 

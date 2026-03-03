@@ -26,7 +26,7 @@ namespace DumpDNS.Functionality.Records
             Headers = new List<string> { "Value", "Tag", "Flags", "Domain", "TTL", "Initial TTL" };
             Rows = new List<List<string>>();
 
-            var lookup = new LookupClient();
+            var lookup = Functionality.Dump.client;
             IDnsQueryResponse response = lookup.Query(domain, QueryType.CAA);
             records = response.AllRecords.CaaRecords().ToArray();
 

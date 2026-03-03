@@ -26,7 +26,7 @@ namespace DumpDNS.Functionality.Records
             Headers = new List<string> { "Domain", "Flags", "TTL", "Initial TTL", "Order", "Preference", "Regex", "Replacement", "Services" };
             Rows = new List<List<string>>();
 
-            var lookup = new LookupClient();
+            var lookup = Functionality.Dump.client;
             IDnsQueryResponse response = lookup.Query(domain, QueryType.NAPTR);
             DnsClient.Protocol.NAPtrRecord[] records = response.AllRecords.NAPtrRecords().ToArray();
 

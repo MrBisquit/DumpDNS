@@ -21,7 +21,7 @@ namespace DumpDNS.Functionality.Records
             Headers = new List<string> { "Domain", "TTL", "Initial TTL", "Priority", "Target", "Weight" };
             Rows = new List<List<string>>();
 
-            var lookup = new LookupClient();
+            var lookup = Functionality.Dump.client;
             IDnsQueryResponse response = lookup.Query(domain, QueryType.URI);
             records = response.AllRecords.UriRecords().ToArray();
 

@@ -26,7 +26,7 @@ namespace DumpDNS.Functionality.Records
             Headers = new List<string> { "Certificate Association Data", "Certificate Usage", "Domain", "TTL", "Initial TTL", "Matching Type", "Selector" };
             Rows = new List<List<string>>();
 
-            var lookup = new LookupClient();
+            var lookup = Functionality.Dump.client;
             IDnsQueryResponse response = lookup.Query(domain, QueryType.TLSA);
             records = response.AllRecords.TlsaRecords().ToArray();
 
