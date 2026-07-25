@@ -65,36 +65,32 @@ namespace DumpDNS.Functionality
                         break;
                     } else if(key.Key == ConsoleKey.LeftArrow)
                     {
-                        if (Cursor == 0) continue;
-                        if (DnsSelected)
+                        if (DnsSelected && DnsCursor != 0)
                             DnsCursor--;
-                        else
+                        else if(Cursor != 0)
                             Cursor--;
                     } else if(key.Key == ConsoleKey.RightArrow)
                     {
-                        if (Cursor == Domain.Length) continue;
-                        if (DnsSelected)
+                        if (DnsSelected && DnsCursor != Dns.Length)
                             DnsCursor++;
-                        else
+                        else if(Cursor != Domain.Length)
                             Cursor++;
                     } else if(key.Key == ConsoleKey.Backspace)
                     {
-                        if (Domain.Length == 0) continue;
-                        if(DnsSelected)
+                        if(DnsSelected && Dns.Length > 0)
                         {
                             Dns.Remove(DnsCursor - 1, 1);
                             DnsCursor--;
-                        } else
+                        } else if(Domain.Length > 0)
                         {
                             Domain.Remove(Cursor - 1, 1);
                             Cursor--;
                         }
                     } else if(key.Key == ConsoleKey.Delete)
                     {
-                        if (Cursor == Domain.Length) continue;
-                        if (DnsSelected)
+                        if (DnsSelected && DnsCursor != Dns.Length)
                             Dns.Remove(DnsCursor, 1);
-                        else
+                        else if(Cursor != Domain.Length)
                             Domain.Remove(Cursor, 1);
                     } else if(key.Key == ConsoleKey.Enter)
                     {
