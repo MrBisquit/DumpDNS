@@ -65,7 +65,7 @@ namespace DumpDNS
                 Console.Clear();
 
                 // Second stage, dump DNS records
-                IDnsQueryResponse dump = Functionality.Dump.Start(DomainSelection.Domain.ToString(), (LastW, LastH));
+                IDnsQueryResponse dump = Functionality.Dump.Start(DomainSelection.Domain.ToString(), (LastW, LastH), DomainSelection.Dns.ToString());
 
                 Console.Clear();
 

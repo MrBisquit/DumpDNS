@@ -1,16 +1,17 @@
 ﻿using DnsClient;
+using System.Net;
 
 namespace DumpDNS.Functionality
 {
     public static class Dump
     {
-        public static LookupClient client = new();
+        internal static LookupClient client = new();
 
         public static IDnsQueryResponse Start(string domain, (int, int) dimensions, string? ip_str = null)
         {
             if(ip_str != null)
             {
-                (System.Net.IPAddress, int)? result = ParseIP(ip_str);
+                (IPAddress, int)? result = ParseIP(ip_str);
                 if(result != null)
                     client = new(result.Value.Item1, result.Value.Item2);
             }
@@ -19,30 +20,46 @@ namespace DumpDNS.Functionality
             if(Program.Render != null) Program.Render(null, dimensions);
             Console.CursorTop = 2;
             Console.CursorLeft = 0;
+            Console.WriteLine($"Using {client.Settings.NameServers[0].Address}:{client.Settings.NameServers[0].Port}");
             Console.Write("Working...");
-            foreach (var Record in Types.IRecords)
+            void DrawBar(double progress)
             {
-                Record.Value.FetchData(domain);
-                Console.Write($"\rWorking... {Record.Key.ToString().PadRight(8)}");
+                dimensions = new(Console.BufferWidth, Console.BufferHeight);
+
+                Console.CursorTop = 5;
+                Console.CursorLeft = 0;
+
+                int filled = (int)Math.Ceiling(progress * ((double)dimensions.Item1 - 2) / 100);
+                Console.BackgroundColor = ConsoleColor.White;
+                Console.WriteLine(new string(' ', filled));
+                Console.ResetColor();
+
+                Console.CursorTop = 3;
+                Console.CursorLeft = 0;
+            }
+            for(int i = 0; i < Types.IRecords.Count; i++)
+            {
+                var Record = Types.IRecords[(Types.DnsRecordType)i];
+
+                try
+                {
+                    Record.FetchData(domain);
+                }
+                catch (Exception e) { Console.WriteLine(e.ToString()); }
+                finally { DrawBar((double)i / (double)Types.IRecords.Count * 100); }
+                Console.Write($"\rWorking... { Types.IRecords.Keys.ToList()[i],-8}");
             }
             var lookup = new LookupClient();
             return lookup.Query(domain, QueryType.ANY); // This wont work, but needs to return something
         }
 
-        public static (System.Net.IPAddress, int)? ParseIP(string ip)
+        public static (IPAddress, int)? ParseIP(string ip)
         {
-            System.Net.IPAddress? address;
+            var parts = ip.Split(':', 2);
             int port = 53;
-
-            string[] split_a = ip.Split(":");
-            if (split_a.Length == 2)
-            {
-                port = int.Parse(split_a[1]);
-            }
-            else if (split_a.Length == 0 || split_a.Length < 2)
+            if (!IPAddress.TryParse(parts[0], out var address))
                 return null;
-
-            if (!System.Net.IPAddress.TryParse(split_a[0], out address))
+            if (parts.Length == 2 && !int.TryParse(parts[1], out port))
                 return null;
 
             return (address, port);
