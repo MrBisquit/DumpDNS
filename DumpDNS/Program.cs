@@ -8,18 +8,23 @@ namespace DumpDNS
         static int LastW = 0;
         static int LastH = 0;
         static Task? ResizeTask;
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+            if(args.Length > 0)
+            {
+                return CLI.CLI.Run(args);
+            }
+
             Console.Title = "DumpDNS";
             Console.Clear();
             Console.WriteLine("Working...");
-            SizeChanged += (object? sender, (int, int) dimensions) =>
+            SizeChanged += static (sender, dimensions) =>
             {
                 Console.ResetColor();
                 Console.Clear(); // Wipe it
                 LastW = dimensions.Item1;
                 LastH = dimensions.Item2;
-                if (Render != null) Render.Invoke(sender, dimensions); // Call render if it is defined
+                Render?.Invoke(sender, dimensions); // Call render if it is defined
             };
 
             ResizeTask = Task.Factory.StartNew(() =>
@@ -34,13 +39,13 @@ namespace DumpDNS
                 }
             });
 
-            Render += (object? sender, (int, int) dimensions) =>
+            Render += static (sender, dimensions) =>
             {
                 RenderTop();
                 RenderBottom(ActiveInstructions);
             };
 
-            UpdateBottom += (object? sender, EventArgs e) =>
+            UpdateBottom += static (object? sender, EventArgs e) =>
             {
                 Render(sender, (Console.BufferWidth, Console.BufferHeight));
             };
@@ -58,7 +63,7 @@ namespace DumpDNS
 
                 // First stage, select a domain
                 Functionality.DomainSelection DomainSelection = Functionality.DomainSelection.Start((LastW, LastH));
-                if (DomainSelection.Success == false) return;
+                if (DomainSelection.Success == false) return 1;
                 For = DomainSelection.Domain.ToString();
                 Domain = DomainSelection.Domain.ToString();
 
@@ -73,7 +78,7 @@ namespace DumpDNS
                 CanDump = true;
                 bool exit = !Functionality.Results.Start(dump, (LastW, LastH));
 
-                if (exit) return;
+                if (exit) return 0;
             }
         }
 
@@ -87,7 +92,7 @@ namespace DumpDNS
 
         public static string? Domain;
 
-        public static string For;
+        public static string For = string.Empty;
         public static BottomInstructions ActiveInstructions;
 
         public enum BottomInstructions

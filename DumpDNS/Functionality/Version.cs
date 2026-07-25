@@ -18,9 +18,9 @@ namespace DumpDNS.Functionality
         public static bool IsNewVersionAvailable = false;
         public static bool Unreleased = false;
 
-        public static async void StartCheck()
+        public static async Task StartCheck()
         {
-            CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            CurrentVersion = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
             List<string> split = CurrentVersion.Split('.').ToList();
             split.RemoveAt(split.Count - 1);
             CurrentVersion = string.Join('.', split);
@@ -42,7 +42,7 @@ namespace DumpDNS.Functionality
                 VersionString = CurrentVersion;
             }
 
-            Program.UpdateBottom(null, EventArgs.Empty);
+            if(Program.UpdateBottom != null) Program.UpdateBottom(null, EventArgs.Empty);
         }
 
         /// <summary>
@@ -53,14 +53,7 @@ namespace DumpDNS.Functionality
         /// <returns>If the version string you are checking against is higher than the current one</returns>
         public static bool IsHigher(string current, string check)
         {
-            string[] currentSplit = current.Split(".");
-            string[] checkSplit = check.Split('.');
-
-            for (int i = 0; i < currentSplit.Length; i++)
-            {
-                if (int.Parse(currentSplit[i]) < int.Parse(checkSplit[i])) return true;
-            }
-            return false;
+            return System.Version.Parse(current) < System.Version.Parse(check);
         }
     }
 }

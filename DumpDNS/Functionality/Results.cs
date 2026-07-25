@@ -18,7 +18,8 @@ namespace DumpDNS.Functionality
         public enum Modes
         {
             Select,
-            View
+            View,
+            Record
         };
 
         public Modes Mode = Modes.Select;
@@ -52,7 +53,14 @@ namespace DumpDNS.Functionality
                         if(!ViewHandle())
                         {
                             Mode = Modes.Select;
-                            Program.Render(this, Dimensions);
+                            Program.Render!(this, Dimensions);
+                        }
+                        break;
+                    case Modes.Record:
+                        if(!RecordHandle())
+                        {
+                            Mode = Modes.View;
+                            Program.Render!(this, Dimensions);
                         }
                         break;
                     default:
@@ -64,7 +72,9 @@ namespace DumpDNS.Functionality
 
         Grid SwitchGrid = new Grid(false);
         Grid ViewGrid = new Grid(true);
+        Grid RecordGrid = new Grid(true);
         Types.DnsRecordType SelectedType = Types.DnsRecordType.A;
+        int SelectedRecord = -1;
 
         /// <summary>
         /// Handles the user input for the DNS record type switching
@@ -99,7 +109,7 @@ namespace DumpDNS.Functionality
                     Mode = Modes.View;
                     Console.Clear();
                     SelectedType = (Types.DnsRecordType)SwitchGrid.SelectedIndex;
-                    Program.Render(this, Dimensions);
+                    Program.Render!(this, Dimensions);
                 } else if(key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
                 {
                     Program.EnableSearchBar(); // Ctrl+F
@@ -110,7 +120,7 @@ namespace DumpDNS.Functionality
                     Program.Render += Render;
                 }
                 //Console.Clear();
-                Program.Render(this, Dimensions);
+                Program.Render!(this, Dimensions);
             }
 
             return true;
@@ -153,9 +163,68 @@ namespace DumpDNS.Functionality
                     Program.Render -= Render;
                     Program.StartDump(); // Ctrl+D
                     Program.Render += Render;
+                } else if(key.Key == ConsoleKey.Enter)
+                {
+                    Mode = Modes.Record;
+                    Console.Clear();
+                    SelectedRecord = ViewGrid.SelectedIndex;
+                    Program.Render!(this, Dimensions);
                 }
                 //Console.Clear();
-                Program.Render(this, Dimensions);
+                Program.Render!(this, Dimensions);
+            }
+
+            return true;
+        }
+
+        public bool RecordHandle()
+        {
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                int totalRows = Dimensions.Item2 - 3 - 1;
+                if (key.Key == ConsoleKey.UpArrow)
+                {
+                    if (RecordGrid.SelectedIndex == 0) return true;
+                    RecordGrid.SelectedIndex--;
+                    // If the selected index is near the top, go up (if it can)
+                    if (RecordGrid.SelectedIndex - RecordGrid.Position <= RecordGrid.Position &&
+                        RecordGrid.Position != 0)
+                        RecordGrid.Position--;
+                }
+                else if (key.Key == ConsoleKey.DownArrow)
+                {
+                    if (RecordGrid.SelectedIndex == RecordGrid.Rows.Count - 1) return true;
+                    RecordGrid.SelectedIndex++;
+                    // If the selected index is near the bottom, go down (if it can)
+                    if (RecordGrid.SelectedIndex >= totalRows + RecordGrid.Position &&
+                        RecordGrid.Position != RecordGrid.Rows.Count)
+                        RecordGrid.Position++;
+                }
+                else if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.LeftArrow)
+                {
+                    Console.Clear();
+                    return false;
+                }
+                else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
+                {
+                    Program.EnableSearchBar(); // Ctrl+F
+                }
+                else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
+                {
+                    Program.Render -= Render;
+                    Program.StartDump(); // Ctrl+D
+                    Program.Render += Render;
+                }
+                else if (key.Key == ConsoleKey.Enter)
+                {
+                    Mode = Modes.Record;
+                    Console.Clear();
+                    SelectedRecord = RecordGrid.SelectedIndex;
+                    Program.Render!(this, Dimensions);
+                }
+                //Console.Clear();
+                Program.Render!(this, Dimensions);
             }
 
             return true;
@@ -177,6 +246,9 @@ namespace DumpDNS.Functionality
                     break;
                 case Modes.View:
                     RenderView(sender, dimensions);
+                    break;
+                case Modes.Record:
+                    RenderRecord(sender, dimensions);
                     break;
                 default:
                     break;
@@ -211,6 +283,29 @@ namespace DumpDNS.Functionality
             ViewGrid.Headers = Types.IRecords[SelectedType].Headers;
             ViewGrid.Rows = Types.IRecords[SelectedType].Rows;
             ViewGrid.Render(dimensions);
+        }
+
+        public void RenderRecord(object? sender, (int, int) dimensions)
+        {
+            RecordGrid.Title = $"Viewing single {Types.DNSRecordTypeDictionary[SelectedType]} record";
+            RecordGrid.Headers = ["Field", "Value"];
+            RecordGrid.Rows.Clear();
+            for (int i = 0; i < Types.IRecords[SelectedType].Headers.Count; i++)
+            {
+                string str = Types.IRecords[SelectedType].Rows[SelectedRecord][i];
+                int line = 0;
+                int chunk = (dimensions.Item1 / 2) - 25;
+                if(str.Length <= chunk)
+                    RecordGrid.Rows.Add([Types.IRecords[SelectedType].Headers[i], str]);
+                else
+                    while (str.Length > 0)
+                    {
+                        RecordGrid.Rows.Add([Types.IRecords[SelectedType].Headers[i] + $" L{line + 1}", str[..Math.Min(str.Length, chunk)]]);
+                        str = str[..Math.Max(str.Length, str.Length - chunk)];
+                        line++;
+                    }
+            }
+            RecordGrid.Render(dimensions);
         }
 
         public class Scrollbar
