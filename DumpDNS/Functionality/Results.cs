@@ -73,7 +73,7 @@ namespace DumpDNS.Functionality
         {
             if(Console.KeyAvailable)
             {
-                ConsoleKeyInfo key = Console.ReadKey();
+                ConsoleKeyInfo key = Console.ReadKey(true);
                 int totalRows = Dimensions.Item2 - 3 - 1;
                 if (key.Key == ConsoleKey.UpArrow)
                 {
@@ -109,7 +109,7 @@ namespace DumpDNS.Functionality
                     Program.StartDump(); // Ctrl+D
                     Program.Render += Render;
                 }
-                Console.Clear();
+                //Console.Clear();
                 Program.Render(this, Dimensions);
             }
 
@@ -120,7 +120,7 @@ namespace DumpDNS.Functionality
         {
             if (Console.KeyAvailable)
             {
-                ConsoleKeyInfo key = Console.ReadKey();
+                ConsoleKeyInfo key = Console.ReadKey(true);
                 int totalRows = Dimensions.Item2 - 3 - 1;
                 if (key.Key == ConsoleKey.UpArrow)
                 {
@@ -142,6 +142,7 @@ namespace DumpDNS.Functionality
                 }
                 else if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.LeftArrow)
                 {
+                    Console.Clear();
                     return false;
                 }
                 else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
@@ -153,7 +154,7 @@ namespace DumpDNS.Functionality
                     Program.StartDump(); // Ctrl+D
                     Program.Render += Render;
                 }
-                Console.Clear();
+                //Console.Clear();
                 Program.Render(this, Dimensions);
             }
 
@@ -167,6 +168,8 @@ namespace DumpDNS.Functionality
         /// <param name="dimensions">Dimensions of the buffer</param>
         public void Render(object? sender, (int, int) dimensions)
         {
+            if (Dimensions != dimensions) Console.Clear();
+
             switch (Mode)
             {
                 case Modes.Select:
@@ -311,7 +314,13 @@ namespace DumpDNS.Functionality
 
                     for (int j = 0; j < Rows[i].Count; j++)
                     {
-                        Console.Write($"{Rows[i][j]}{new string(' ', ColumnWidths[j] - Rows[i][j].Length)}");
+                        string row = Rows[i][j];
+                        if (row.Length > ColumnWidths[j])
+                        {
+                            row = row.Substring(0, ColumnWidths[j] - 5);
+                            row += "...";
+                        }
+                        Console.Write($"{row}{new string(' ', row.Length < ColumnWidths[j] ? (ColumnWidths[j] - row.Length) : 2)}");
                     }
                     Console.WriteLine(new string(' ', dimensions.Item1 - Console.CursorLeft - 1));
                 }
@@ -337,13 +346,17 @@ namespace DumpDNS.Functionality
                 } else
                 {
                     int[] widths = new int[Headers.Count];
+                    int max = dimensions.Item1 / Headers.Count;
                     for (int i = 0; i < Headers.Count; i++)
                     {
                         widths[i] = Headers[i].Length + 1 + 2;
 
                         for (int j = 0; j < Rows.Count; j++)
                         {
-                            if (widths[i] - 1 < Rows[j][i].Length) widths[i] = Rows[j][i].Length + 1 + 2;
+                            int len = Rows[j][i].Length;
+                            if (len > max) len = max;
+
+                            if (widths[i] - 1 < len) widths[i] = len + 1 + 2;
                         }
                     }
 

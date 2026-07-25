@@ -72,7 +72,7 @@ namespace DumpDNS.Functionality
             {
                 if (Console.KeyAvailable)
                 {
-                    ConsoleKeyInfo key = Console.ReadKey();
+                    ConsoleKeyInfo key = Console.ReadKey(true);
                     // Ctrl+C should already be handled by the shell, so there is no point in creating it here
                     if (key.Key == ConsoleKey.R && key.Modifiers == ConsoleModifiers.Control)
                     {
