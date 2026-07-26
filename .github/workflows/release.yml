@@ -38,6 +38,14 @@ jobs:
                     echo "version=$($matches[1])" >> $env:GITHUB_OUTPUT  
                 }
             shell: pwsh
+          - name: Restore
+            run: dotnet restore
+          - name: Build
+            run: |
+                dotnet publish DumpDNS/DumpDNS.csproj `
+                    -c Release `
+                    -p:Version="${{ steps.version.outputs.version }}"
+                    -o Publish
           - name: Build installer with Inno Setup
             run: |
                 $env:DUMPDNS_VERSION = "${{ steps.version.outputs.version }}"
