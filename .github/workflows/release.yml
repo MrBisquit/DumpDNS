@@ -44,7 +44,10 @@ jobs:
             run: |
                 dotnet publish DumpDNS/DumpDNS.csproj `
                     -c Release `
-                    -p:Version="${{ steps.version.outputs.version }}"
+                    -p:Version="${{ steps.version.outputs.version }}" `
+                    -p:AssemblyVersion="${{ steps.version.outputs.version }}" `
+                    -p:FileVersion="${{ steps.version.outputs.version }}" `
+                    -p:InformationalVersion="${{ steps.version.outputs.version }}" `
                     -o Publish
           - name: Build installer with Inno Setup
             run: |
