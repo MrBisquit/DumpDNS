@@ -53,7 +53,20 @@ namespace DumpDNS.Functionality
         /// <returns>If the version string you are checking against is higher than the current one</returns>
         public static bool IsHigher(string current, string check)
         {
-            return System.Version.Parse(current) < System.Version.Parse(check);
+            // Remove the v at the start of the version code
+            // This mainly occurs when tags are fetched from GitHub
+            // (since the workflow relies on the v being there)
+            if(current.StartsWith("v")) current = current.Substring(1);
+            if(check.StartsWith("v")) check = check.Substring(1);
+
+            try
+            {
+                return System.Version.Parse(current) < System.Version.Parse(check);
+            } catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR: Failed to fetch version information: {ex.Message}");
+            }
+            return false;
         }
     }
 }
