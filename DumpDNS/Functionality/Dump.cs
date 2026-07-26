@@ -7,7 +7,7 @@ namespace DumpDNS.Functionality
     {
         internal static LookupClient client = new();
 
-        public static IDnsQueryResponse Start(string domain, (int, int) dimensions, string? ip_str = null)
+        public static IDnsQueryResponse Start(string domain, (int, int) dimensions, string? ip_str = null, bool log = true)
         {
             if(ip_str != null)
             {
@@ -18,12 +18,17 @@ namespace DumpDNS.Functionality
 
             Program.ActiveInstructions = Program.BottomInstructions.ProcessingNoCancel;
             if(Program.Render != null) Program.Render(null, dimensions);
-            Console.CursorTop = 2;
-            Console.CursorLeft = 0;
-            Console.WriteLine($"Using {client.Settings.NameServers[0].Address}:{client.Settings.NameServers[0].Port}");
-            Console.Write("Working...");
+            if (log)
+            {
+                Console.CursorTop = 2;
+                Console.CursorLeft = 0;
+                Console.WriteLine($"Using {client.Settings.NameServers[0].Address}:{client.Settings.NameServers[0].Port}");
+                Console.Write("Working...");
+            }
             void DrawBar(double progress)
             {
+                if (!log) return;
+
                 dimensions = new(Console.BufferWidth, Console.BufferHeight);
 
                 Console.CursorTop = 5;
@@ -47,7 +52,7 @@ namespace DumpDNS.Functionality
                 }
                 catch (Exception e) { Console.WriteLine(e.ToString()); }
                 finally { DrawBar((double)i / (double)Types.IRecords.Count * 100); }
-                Console.Write($"\rWorking... { Types.IRecords.Keys.ToList()[i],-8}");
+                if(log) Console.Write($"\rWorking... { Types.IRecords.Keys.ToList()[i],-8}");
             }
             var lookup = new LookupClient();
             return lookup.Query(domain, QueryType.ANY); // This wont work, but needs to return something

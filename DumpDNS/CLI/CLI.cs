@@ -1,4 +1,6 @@
-﻿using DumpDNS.Functionality.Records;
+﻿using DnsClient;
+using DumpDNS.Functionality;
+using DumpDNS.Functionality.Records;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -23,7 +25,7 @@ namespace DumpDNS.CLI
         {
             Argument<string> domain = new("Domain")
             {
-                Description = "The domain to query"
+                Description = "The domain to query."
             };
 
             Option<string> dump = new("--dump", "-d", "/dump", "/d")
@@ -33,22 +35,43 @@ namespace DumpDNS.CLI
                 "the file path specified instead of the console."
             };
 
-            Option<IPAddress?> dns = new("--dns", "/dns")
+            Option<IPAddress> dns = new("--dns", "/dns")
             {
                 HelpName = "ip",
-                Description = "Specifies the IP address (and optionally the port) " +
+                Description = "Specifies the IP address " +
                 "of the DNS server to use instead of the default DNS server on the " +
                 "current computer.",
-                DefaultValueFactory = _ => default
+                CustomParser = result => IPAddress.Parse(result.Tokens.Last().Value)
+            };
+
+            Option<int> dnsPort = new("--dns-port", "-dp", "/dns-port", "/dp", "--port", "/port")
+            {
+                HelpName = "port",
+                Description = "Specifies the port of the DNS server, this is only " +
+                "useful when used when specifying a custom DNS server.\n" +
+                "Use \"DumpDNS -?\" for usage information.",
+                DefaultValueFactory = _ => { return 53; }
             };
 
             Option<List<Types.DnsRecordType>> records = new("--records", "-r", "/records", "/r")
             {
                 HelpName = "record type",
                 Description = $"Specify one or more of the following:\n{string.Join(", ", Types.RecordTypes)}\n" +
-                $"Specifying none defaults to all",
+                $"Specifying none defaults to all.",
                 DefaultValueFactory = _ => [.. Types.RecordTypes],
                 AllowMultipleArgumentsPerToken = true
+            };
+
+            Option<bool> stats = new("--statistics", "--stats", "-s", "/statistics", "/stats", "/s")
+            {
+                Description = "Displays statistics.",
+                DefaultValueFactory = _ => { return false; }
+            };
+
+            Option<bool> colour = new("--colour", "--color", "-c", "/colour", "/color", "/c")
+            {
+                Description = "Uses colour to highlight useful information.",
+                DefaultValueFactory = _ => { return false; }
             };
 
             RootCommand rootCommand = new("DumpDNS")
@@ -56,7 +79,10 @@ namespace DumpDNS.CLI
                 domain,
                 dump,
                 dns,
-                records
+                dnsPort,
+                records,
+                stats,
+                colour
             };
             rootCommand.SetAction((result) =>
             {
@@ -65,11 +91,14 @@ namespace DumpDNS.CLI
                 ) {
                     var parsedDump = result.GetValue(dump);
                     var parsedDNS = result.GetValue(dns);
+                    var parsedDNSPort = result.GetValue(dnsPort);
                     var parsedRecords = result.GetValue(records);
+                    var parsedStats = result.GetValue(stats);
+                    var parsedColour = result.GetValue(colour);
 
-                    Console.WriteLine($"Running DumpDNS on domain \"{parsedDomain}\" (With {(parsedDNS == null ? "default" : parsedDNS)} DNS server)");
+                    Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
 
-                    return 0;
+                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, parsedColour);
                 }
 
                 foreach (var error in result.Errors)
