@@ -3,7 +3,8 @@
 ; Non-commercial use only
 
 #define MyAppName "DumpDNS"
-#ifndef MyAppVersion
+#define MyAppVersion GetEnv("DUMPDNS_VERSION")
+#if MyAppVersion == ""
   #define MyAppVersion "0.0.0-dev"
 #endif
 #define MyAppPublisher "WTDawson"

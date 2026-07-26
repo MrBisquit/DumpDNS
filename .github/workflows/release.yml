@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+        type: string
+  push:
+    tags:
+      - 'v*'
+
+env:
+    DOTNET_VERSION: '8.0.x'
+    DOTNET_HUMAN: '8.0'
+
+jobs:
+    build-installer-windows:
+        name: Windows Installer
+        runs-on: windows-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+            with:
+                fetch-depth: 0
+                submodules: recursive # Not required, but just in case
+          - name: Setup .NET
+            uses: actions/setup-dotnet@v4
+            with:
+                dotnet-version: ${{ env.DOTNET_VERSION }}
+          - name: Determine version
+            id: version
+            run: |
+                if ('${{ github.event_name }}' -eq 'workflow_dispatch' -and '${{ github.event.inputs.version }}' -ne '') {  
+                    echo "version=${{ github.event.inputs.version }}" >> $env:GITHUB_OUTPUT  
+                } elseif ('${{ github.event_name }}' -eq 'push' -and '${{ github.ref }}' -match '^refs/tags/v(.*)$') {  
+                    echo "version=$($matches[1])" >> $env:GITHUB_OUTPUT  
+                }
+            shell: pwsh
+          - name: Build installer with Inno Setup
+            run: |
+                $env:DUMPDNS_VERSION = "${{ steps.version.outputs.version }}"
+                iscc setup.iss
+            shell: pwsh
+          - name: Upload Windows installer
+            uses: actions/upload-artifact@v4
+            with:
+                name: installer-windows
+                path: output/DumpDNS-*.exe
+                retention-days: 30
+        outputs:
+            version: ${{ steps.version.outputs.version }}
+
+    create-release:
+        name: Create Release
+        needs: [build-installer-windows]
+        if: startsWith(github.ref, 'refs/tags/v')
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+          - name: Download all installer artifacts
+            uses: actions/download-artifact@v4
+            with:
+                path: installers
+                merge-multiple: false
+          - name: Create Release
+            uses: softprops/action-gh-release@v2
+            with:
+                name: "DumpDNS ${{ needs.build-installer-windows.outputs.version }}"
+                body: |
+                    ## DumpDNS ${{ needs.build-installer-windows.outputs.version }}
+
+                    ### Downloads
+
+                    | Platform | File | Notes |
+                    |----------|------|-------|
+                    | Windows | `DumpDNS-${{ needs.build-installer-windows.outputs.version }}-setup.exe` | Run the installer, requires the .NET ${{ env.DOTNET_HUMAN }} SDK |
+
+                    ### Prerequisites
+
+                    - [.NET ${{ env.DOTNET_HUMAN }} SDK](https://dot.net/download)
+                draft: false
+                prerelease: false
+                files: |
+                    installers/installer-windows/*
