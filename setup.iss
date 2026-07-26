@@ -59,8 +59,8 @@ Source: "DumpDNS\bin\Release\net8.0\*"; DestDir: "{app}"; Flags: ignoreversion r
 
 [Registry]
 Root: HKLM; Subkey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"; \
-    ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}\{#MyAppExeName}"; \
-    Check: NeedsAddPath('{app}\{#MyAppExeName}')
+    ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}"; \
+    Check: NeedsAddPath('{app}')
 
 [Code]
 
