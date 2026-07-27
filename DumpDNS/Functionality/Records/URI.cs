@@ -51,7 +51,7 @@ namespace DumpDNS.Functionality.Records
                 str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";
                 str += $"\tPRIORITY:".PadRight(DumpFile.Padding) + $"{record.Priority}\n";
                 str += $"\tTARGET:".PadRight(DumpFile.Padding) + $"{record.Target}\n";
-                str += $"\tWEIGHT:".PadRight(DumpFile.Padding) + $"{ record.Target}\n";
+                str += $"\tWEIGHT:".PadRight(DumpFile.Padding) + $"{record.Target}\n";
                 str += "\n\n";
             }
             return str;

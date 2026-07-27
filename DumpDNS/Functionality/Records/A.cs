@@ -70,12 +70,12 @@ namespace DumpDNS.Functionality.Records
             if (colour) Console.ResetColor();
             if (sources.Item1.Count != 0)
                 Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}Belongs to");
-            for(int j = 0; j < sources.Item1.Count; j++)
+            for (int j = 0; j < sources.Item1.Count; j++)
             {
                 Console.Write($"\t{new string(' ', CLI.Results.ResultsPadding)}\t");
                 if (colour) Console.ForegroundColor = sources.Item1[j].Colour;
                 Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}\t" + sources.Item1[j].Label);
-                if(colour) Console.ResetColor();
+                if (colour) Console.ResetColor();
             }
             if (sources.Item2.Count != 0)
                 Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}CIDRs");

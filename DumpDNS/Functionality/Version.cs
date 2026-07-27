@@ -28,21 +28,23 @@ namespace DumpDNS.Functionality
             IsVisible = true;
             GitHubClient client = new GitHubClient(new ProductHeaderValue("DumpDNS"));
             var release = await client.Repository.Release.GetLatest("MrBisquit", "DumpDNS");
-            
-            if(IsHigher(CurrentVersion, release.TagName))
+
+            if (IsHigher(CurrentVersion, release.TagName))
             {
                 VersionString = $"{CurrentVersion} < {release.TagName}";
                 IsNewVersionAvailable = true;
-            } else if(IsHigher(release.TagName, CurrentVersion))
+            }
+            else if (IsHigher(release.TagName, CurrentVersion))
             {
                 VersionString = $"Unreleased ({CurrentVersion})";
                 Unreleased = true;
-            } else
+            }
+            else
             {
                 VersionString = CurrentVersion;
             }
 
-            if(Program.UpdateBottom != null) Program.UpdateBottom(null, EventArgs.Empty);
+            if (Program.UpdateBottom != null) Program.UpdateBottom(null, EventArgs.Empty);
         }
 
         /// <summary>
@@ -56,13 +58,14 @@ namespace DumpDNS.Functionality
             // Remove the v at the start of the version code
             // This mainly occurs when tags are fetched from GitHub
             // (since the workflow relies on the v being there)
-            if(current.StartsWith("v")) current = current.Substring(1);
-            if(check.StartsWith("v")) check = check.Substring(1);
+            if (current.StartsWith("v")) current = current.Substring(1);
+            if (check.StartsWith("v")) check = check.Substring(1);
 
             try
             {
                 return System.Version.Parse(current) < System.Version.Parse(check);
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine($"ERROR: Failed to fetch version information: {ex.Message}");
             }

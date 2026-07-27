@@ -9,15 +9,15 @@ namespace DumpDNS.Functionality
 
         public static IDnsQueryResponse Start(string domain, (int, int) dimensions, string? ip_str = null, bool log = true)
         {
-            if(ip_str != null)
+            if (ip_str != null)
             {
                 (IPAddress, int)? result = ParseIP(ip_str);
-                if(result != null)
+                if (result != null)
                     client = new(result.Value.Item1, result.Value.Item2);
             }
 
             Program.ActiveInstructions = Program.BottomInstructions.ProcessingNoCancel;
-            if(Program.Render != null) Program.Render(null, dimensions);
+            if (Program.Render != null) Program.Render(null, dimensions);
             if (log)
             {
                 Console.CursorTop = 2;
@@ -42,7 +42,7 @@ namespace DumpDNS.Functionality
                 Console.CursorTop = 3;
                 Console.CursorLeft = 0;
             }
-            for(int i = 0; i < Types.IRecords.Count; i++)
+            for (int i = 0; i < Types.IRecords.Count; i++)
             {
                 var Record = Types.IRecords[(Types.DnsRecordType)i];
 
@@ -52,7 +52,7 @@ namespace DumpDNS.Functionality
                 }
                 catch (Exception e) { Console.WriteLine(e.ToString()); }
                 finally { DrawBar((double)i / (double)Types.IRecords.Count * 100); }
-                if(log) Console.Write($"\rWorking... { Types.IRecords.Keys.ToList()[i],-8}");
+                if (log) Console.Write($"\rWorking... {Types.IRecords.Keys.ToList()[i],-8}");
             }
             var lookup = new LookupClient();
             return lookup.Query(domain, QueryType.ANY); // This wont work, but needs to return something

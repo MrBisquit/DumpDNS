@@ -20,29 +20,31 @@ namespace DumpDNS.CLI
             else
                 Functionality.Dump.client = new();
 
-            for(int i = 0; i < records.Count; i++)
+            for (int i = 0; i < records.Count; i++)
             {
                 var record = Types.IRecords[records[i]];
 
                 try
                 {
                     record.FetchData(domain);
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     Console.WriteLine($"ERROR: Failed to get {records[i]} records: {ex.Message}");
                 }
             }
 
-            if(depth > CLI.Depth.Minimal)
+            if (depth > CLI.Depth.Minimal)
             {
                 // Looks up things such as IP Addresses in CIDR ranges
                 Ranges.LoadRanges();
             }
 
-            if(dump != null)
+            if (dump != null)
             {
                 DumpFile.CreateDump(dump, domain, records);
-            } else
+            }
+            else
             {
                 if (statistics) Results.DisplayResultTotals(records, colour, depth);
                 Results.DisplayResults(records, colour, depth);

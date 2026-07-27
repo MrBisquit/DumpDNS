@@ -11,7 +11,7 @@ namespace DumpDNS.Functionality
             Program.ActiveInstructions = Program.BottomInstructions.OptionsWithBackWithExit;
             Program.Render += results.Render;
             Program.Render(null, dimensions);
-            
+
             return results.StartCycle();
         }
 
@@ -50,14 +50,14 @@ namespace DumpDNS.Functionality
                         }
                         break;
                     case Modes.View:
-                        if(!ViewHandle())
+                        if (!ViewHandle())
                         {
                             Mode = Modes.Select;
                             Program.Render!(this, Dimensions);
                         }
                         break;
                     case Modes.Record:
-                        if(!RecordHandle())
+                        if (!RecordHandle())
                         {
                             Mode = Modes.View;
                             Program.Render!(this, Dimensions);
@@ -81,7 +81,7 @@ namespace DumpDNS.Functionality
         /// </summary>
         public bool SwitchHandle()
         {
-            if(Console.KeyAvailable)
+            if (Console.KeyAvailable)
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 int totalRows = Dimensions.Item2 - 3 - 1;
@@ -93,7 +93,8 @@ namespace DumpDNS.Functionality
                     if (SwitchGrid.SelectedIndex - SwitchGrid.Position <= SwitchGrid.Position &&
                         SwitchGrid.Position != 0)
                         SwitchGrid.Position--;
-                } else if(key.Key == ConsoleKey.DownArrow)
+                }
+                else if (key.Key == ConsoleKey.DownArrow)
                 {
                     if (SwitchGrid.SelectedIndex == SwitchGrid.Rows.Count - 1) return true;
                     SwitchGrid.SelectedIndex++;
@@ -101,19 +102,23 @@ namespace DumpDNS.Functionality
                     if (SwitchGrid.SelectedIndex >= totalRows + SwitchGrid.Position &&
                         SwitchGrid.Position != SwitchGrid.Rows.Count)
                         SwitchGrid.Position++;
-                } else if(key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.LeftArrow)
+                }
+                else if (key.Key == ConsoleKey.Escape || key.Key == ConsoleKey.LeftArrow)
                 {
                     return false;
-                } else if(key.Key == ConsoleKey.Enter)
+                }
+                else if (key.Key == ConsoleKey.Enter)
                 {
                     Mode = Modes.View;
                     Console.Clear();
                     SelectedType = (Types.DnsRecordType)SwitchGrid.SelectedIndex;
                     Program.Render!(this, Dimensions);
-                } else if(key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
+                }
+                else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
                 {
                     Program.EnableSearchBar(); // Ctrl+F
-                } else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
+                }
+                else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
                 {
                     Program.Render -= Render;
                     Program.StartDump(); // Ctrl+D
@@ -158,12 +163,14 @@ namespace DumpDNS.Functionality
                 else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
                 {
                     Program.EnableSearchBar(); // Ctrl+F
-                } else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
+                }
+                else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
                 {
                     Program.Render -= Render;
                     Program.StartDump(); // Ctrl+D
                     Program.Render += Render;
-                } else if(key.Key == ConsoleKey.Enter)
+                }
+                else if (key.Key == ConsoleKey.Enter)
                 {
                     Mode = Modes.Record;
                     Console.Clear();
@@ -263,7 +270,7 @@ namespace DumpDNS.Functionality
         public void RenderSwitch(object? sender, (int, int) dimensions)
         {
             // Assume that there are more record types than what can fit on the screen
-            if(SwitchGrid.Title.Length == 0)
+            if (SwitchGrid.Title.Length == 0)
             {
                 SwitchGrid.Title = "Which DNS record type would you like to view?";
                 SwitchGrid.Headers = new List<string> { "Record Type" };
@@ -295,7 +302,7 @@ namespace DumpDNS.Functionality
                 string str = Types.IRecords[SelectedType].Rows[SelectedRecord][i];
                 int line = 0;
                 int chunk = (dimensions.Item1 / 2) - 25;
-                if(str.Length <= chunk)
+                if (str.Length <= chunk)
                     RecordGrid.Rows.Add([Types.IRecords[SelectedType].Headers[i], str]);
                 else
                     while (str.Length > 0)
@@ -376,7 +383,7 @@ namespace DumpDNS.Functionality
                 Console.WriteLine($"{Title}{new string(' ', dimensions.Item1 - Title.Length)}");
                 Console.ResetColor();
 
-                if(HasColumnHeaders)
+                if (HasColumnHeaders)
                 {
                     Console.CursorTop = StartX - 1;
 
@@ -400,7 +407,8 @@ namespace DumpDNS.Functionality
                     {
                         Console.BackgroundColor = ConsoleColor.Gray;
                         Console.ForegroundColor = ConsoleColor.Black;
-                    } else
+                    }
+                    else
                     {
                         if (i % 2 == 0) Console.BackgroundColor = ConsoleColor.DarkGray;
                         else Console.BackgroundColor = ConsoleColor.Black;
@@ -438,7 +446,8 @@ namespace DumpDNS.Functionality
                 {
                     // If there is only 1 header, assume that it takes the entire column up
                     ColumnWidths = new List<int> { dimensions.Item1 };
-                } else
+                }
+                else
                 {
                     int[] widths = new int[Headers.Count];
                     int max = dimensions.Item1 / Headers.Count;

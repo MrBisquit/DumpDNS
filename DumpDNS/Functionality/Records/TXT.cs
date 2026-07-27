@@ -49,7 +49,7 @@ namespace DumpDNS.Functionality.Records
             {
                 DnsClient.Protocol.TxtRecord record = records[i];
                 str += $"Record {i}\n";
-                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{ record.DomainName}\n";
+                str += $"\tDOMAIN:".PadRight(DumpFile.Padding) + $"{record.DomainName}\n";
                 str += $"\tTEXT:".PadRight(DumpFile.Padding) + $"{string.Join(", ", record.Text)}\n";
                 str += $"\tTTL:".PadRight(DumpFile.Padding) + $"{record.TimeToLive}\n";
                 str += $"\tInitial TTL:".PadRight(DumpFile.Padding) + $"{record.InitialTimeToLive}";

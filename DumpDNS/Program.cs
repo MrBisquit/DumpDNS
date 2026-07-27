@@ -10,7 +10,7 @@ namespace DumpDNS
         static Task? ResizeTask;
         static int Main(string[] args)
         {
-            if(args.Length > 0)
+            if (args.Length > 0)
             {
                 return CLI.CLI.Run(args);
             }
@@ -29,7 +29,7 @@ namespace DumpDNS
 
             ResizeTask = Task.Factory.StartNew(() =>
             {
-                while(true)
+                while (true)
                 {
                     if (Console.BufferWidth != LastW || Console.BufferHeight != LastH)
                     {
@@ -119,23 +119,23 @@ namespace DumpDNS
         public static Dictionary<BottomInstructions, string> BottomInstructionsDictionary =
         new()
         {
-            [BottomInstructions.Text]                               = "Enter: Finish | Ctrl+R: Clear",
-            [BottomInstructions.Options]                            = "Up/Down/Enter: Select",
-            [BottomInstructions.OptionsWithBack]                    = "Up/Down/Enter: Select | Escape/Left: Back",
-            [BottomInstructions.OptionsWithBackSecondary]           = "Up/Down/Enter: Select | Left: Back",
-            [BottomInstructions.Processing]                         = "Escape: Cancel",
-            [BottomInstructions.ProcessingNoCancel]                 = "No options available",
+            [BottomInstructions.Text] = "Enter: Finish | Ctrl+R: Clear",
+            [BottomInstructions.Options] = "Up/Down/Enter: Select",
+            [BottomInstructions.OptionsWithBack] = "Up/Down/Enter: Select | Escape/Left: Back",
+            [BottomInstructions.OptionsWithBackSecondary] = "Up/Down/Enter: Select | Left: Back",
+            [BottomInstructions.Processing] = "Escape: Cancel",
+            [BottomInstructions.ProcessingNoCancel] = "No options available",
 
             // With exit
-            [BottomInstructions.TextWithExit]                       = "Enter: Finish | Tab: Switch | Ctrl+R: Clear | Ctrl+C: Exit",
-            [BottomInstructions.OptionsWithExit]                    = "Up/Down/Enter: Select | Ctrl+C: Exit",
-            [BottomInstructions.OptionsWithBackWithExit]            = "Up/Down/Enter: Select | Escape/Left: Back | Ctrl+C Exit",
-            [BottomInstructions.OptionsWithBackSecondaryWithExit]   = "Up/Down/Enter: Select | Left: Back | Ctrl+C: Exit",
-            [BottomInstructions.ProcessingWithExit]                 = "Escape: Cancel | Ctrl+C: Exit",
-            [BottomInstructions.ProcessingNoCancelWithExit]         = "Ctrl+C: Exit",
+            [BottomInstructions.TextWithExit] = "Enter: Finish | Tab: Switch | Ctrl+R: Clear | Ctrl+C: Exit",
+            [BottomInstructions.OptionsWithExit] = "Up/Down/Enter: Select | Ctrl+C: Exit",
+            [BottomInstructions.OptionsWithBackWithExit] = "Up/Down/Enter: Select | Escape/Left: Back | Ctrl+C Exit",
+            [BottomInstructions.OptionsWithBackSecondaryWithExit] = "Up/Down/Enter: Select | Left: Back | Ctrl+C: Exit",
+            [BottomInstructions.ProcessingWithExit] = "Escape: Cancel | Ctrl+C: Exit",
+            [BottomInstructions.ProcessingNoCancelWithExit] = "Ctrl+C: Exit",
 
             // Search specific
-            [BottomInstructions.Search]                             = "Escape: Back"
+            [BottomInstructions.Search] = "Escape: Back"
         };
 
         public class SearchBar
@@ -160,7 +160,7 @@ namespace DumpDNS
             public bool StartCycle()
             {
                 Program.Render += Render;
-                while(true)
+                while (true)
                 {
                     Thread.Sleep(10);
                     return false; // Temporary
@@ -232,17 +232,19 @@ namespace DumpDNS
             Console.ResetColor();
 
             // Render the version string, if enabled
-            if(Functionality.Version.IsVisible)
+            if (Functionality.Version.IsVisible)
             {
                 Console.CursorLeft = Console.BufferWidth - Functionality.Version.VersionString.Length;
-                if(Functionality.Version.IsNewVersionAvailable)
+                if (Functionality.Version.IsNewVersionAvailable)
                 {
                     Console.BackgroundColor = ConsoleColor.DarkRed;
-                } else if(Functionality.Version.Unreleased)
+                }
+                else if (Functionality.Version.Unreleased)
                 {
                     Console.BackgroundColor = ConsoleColor.Blue;
                     Console.ForegroundColor = ConsoleColor.Black;
-                } else
+                }
+                else
                 {
                     Console.BackgroundColor = ConsoleColor.Green;
                     Console.ForegroundColor = ConsoleColor.Black;

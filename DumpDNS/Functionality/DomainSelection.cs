@@ -59,57 +59,67 @@ namespace DumpDNS.Functionality
                             DnsCursor = 0;
                         else
                             Cursor = 0;
-                    } else if(key.Key == ConsoleKey.Escape)
+                    }
+                    else if (key.Key == ConsoleKey.Escape)
                     {
                         Program.Render -= Render;
                         break;
-                    } else if(key.Key == ConsoleKey.LeftArrow)
+                    }
+                    else if (key.Key == ConsoleKey.LeftArrow)
                     {
                         if (DnsSelected && DnsCursor != 0)
                             DnsCursor--;
-                        else if(Cursor != 0)
+                        else if (Cursor != 0)
                             Cursor--;
-                    } else if(key.Key == ConsoleKey.RightArrow)
+                    }
+                    else if (key.Key == ConsoleKey.RightArrow)
                     {
                         if (DnsSelected && DnsCursor != Dns.Length)
                             DnsCursor++;
-                        else if(Cursor != Domain.Length)
+                        else if (Cursor != Domain.Length)
                             Cursor++;
-                    } else if(key.Key == ConsoleKey.Backspace)
+                    }
+                    else if (key.Key == ConsoleKey.Backspace)
                     {
-                        if(DnsSelected && Dns.Length > 0)
+                        if (DnsSelected && Dns.Length > 0)
                         {
                             Dns.Remove(DnsCursor - 1, 1);
                             DnsCursor--;
-                        } else if(Domain.Length > 0)
+                        }
+                        else if (Domain.Length > 0)
                         {
                             Domain.Remove(Cursor - 1, 1);
                             Cursor--;
                         }
-                    } else if(key.Key == ConsoleKey.Delete)
+                    }
+                    else if (key.Key == ConsoleKey.Delete)
                     {
                         if (DnsSelected && DnsCursor != Dns.Length)
                             Dns.Remove(DnsCursor, 1);
-                        else if(Cursor != Domain.Length)
+                        else if (Cursor != Domain.Length)
                             Domain.Remove(Cursor, 1);
-                    } else if(key.Key == ConsoleKey.Enter)
+                    }
+                    else if (key.Key == ConsoleKey.Enter)
                     {
-                        if(CheckValidity() && CheckDNSValidity())
+                        if (CheckValidity() && CheckDNSValidity())
                         {
                             Success = true;
                             Program.Render -= Render;
                             break;
                         }
-                    } else if(key.Key == ConsoleKey.Tab)
+                    }
+                    else if (key.Key == ConsoleKey.Tab)
                     {
                         DnsSelected = !DnsSelected;
-                    } else
+                    }
+                    else
                     {
-                        if(DnsSelected)
+                        if (DnsSelected)
                         {
                             Dns.Insert(DnsCursor, key.KeyChar);
                             DnsCursor++;
-                        } else
+                        }
+                        else
                         {
                             if (Domain.Length == 256 || Domain.Length == Dimensions.Item1) continue;
                             if (AllowedChars.Contains(key.KeyChar))
@@ -137,7 +147,7 @@ namespace DumpDNS.Functionality
             DomainValid = true;
             string[] split = Domain.ToString().Split('.');
             if (split.Length <= 1) { DomainValid = false; }
-            foreach (string s in split) if(s.Length == 0) { DomainValid = false; break; }
+            foreach (string s in split) if (s.Length == 0) { DomainValid = false; break; }
             return DomainValid;
         }
 
@@ -196,7 +206,7 @@ namespace DumpDNS.Functionality
             Console.ResetColor();
             Console.WriteLine("Type the DNS server you would like to use (E.g. 1.1.1.1, or 192.168.1.1:53)");
 
-            if(Dns.Length > dimensions.Item1)
+            if (Dns.Length > dimensions.Item1)
             {
                 Dns.Clear();
                 Cursor = 0;
@@ -209,13 +219,14 @@ namespace DumpDNS.Functionality
             {
                 Console.ForegroundColor = ConsoleColor.Black;
                 Console.WriteLine(Dns.ToString());
-            } else
+            }
+            else
             {
                 Console.ForegroundColor = DnsSelected ? ConsoleColor.DarkGray : ConsoleColor.Gray;
                 Console.WriteLine("Default");
             }
 
-                Console.CursorLeft = 0;
+            Console.CursorLeft = 0;
             if (DnsValid)
             {
                 Console.BackgroundColor = ConsoleColor.DarkGreen;

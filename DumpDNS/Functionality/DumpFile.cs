@@ -76,7 +76,7 @@ namespace DumpDNS.Functionality
             Console.Clear();
             Program.Render += Render;
             Program.Render(this, Dimensions);
-            while(true)
+            while (true)
             {
                 if (Console.KeyAvailable)
                 {

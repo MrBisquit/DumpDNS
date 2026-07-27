@@ -29,12 +29,12 @@ namespace DumpDNS.CLI
             {
                 var record = Types.IRecords[item];
 
-                for(int i = 0; i < record.Rows.Count; i++)
+                for (int i = 0; i < record.Rows.Count; i++)
                 {
                     var row = record.Rows[i];
                     Console.WriteLine($"{item} Record\t({i + 1} of {record.Rows.Count})");
 
-                    if(depth == CLI.Depth.Minimal)
+                    if (depth == CLI.Depth.Minimal)
                     {
                         for (int j = 0; j < row.Count; j++)
                         {

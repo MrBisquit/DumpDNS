@@ -22,11 +22,12 @@ namespace DumpDNS.CLI
 
             Functionality.Version.StartCheck().Wait();
             Console.WriteLine($"\rDumpDNS Version:\t{Functionality.Version.VersionString}");
-            if(Functionality.Version.IsNewVersionAvailable)
+            if (Functionality.Version.IsNewVersionAvailable)
             {
                 Console.Write($"\nThere is a new version available ({Functionality.Version.VersionString}), " +
                     "see https://github.com/MrBisquit/DumpDNS/releases/latest/ to download it.");
-            } else
+            }
+            else
             {
                 Console.WriteLine($"\nUp to date! (Current: {Functionality.Version.CurrentVersion} Available: {Functionality.Version.VersionString})");
             }

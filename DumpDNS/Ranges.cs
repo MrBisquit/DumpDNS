@@ -81,7 +81,7 @@ namespace DumpDNS
         }
         public static void UpdateRanges()
         {
-            if(!Directory.Exists(Dir))
+            if (!Directory.Exists(Dir))
                 Directory.CreateDirectory(Dir);
 
             Sources.Clear();
@@ -146,7 +146,7 @@ namespace DumpDNS
             NeedsUpdating = DateTime.Now.AddDays(1);
 
             List<string> rangesLines = [];
-            foreach(var key in Sources)
+            foreach (var key in Sources)
             {
                 rangesLines.Add(key.Key);
                 foreach (var range in key.Value.Ranges)
@@ -170,7 +170,7 @@ namespace DumpDNS
         }
         public static void LoadRanges()
         {
-            if(!Directory.Exists(Dir) ||
+            if (!Directory.Exists(Dir) ||
                 !File.Exists(SourcesPath) ||
                 !File.Exists(UpdatePath) ||
                 !File.Exists(SourceList))
@@ -215,7 +215,7 @@ namespace DumpDNS
             List<string> CIDRs = [];
             foreach (var source in Sources)
             {
-                foreach(var range in source.Value.Ranges)
+                foreach (var range in source.Value.Ranges)
                 {
                     if (range.Family == family)
                     {

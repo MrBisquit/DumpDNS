@@ -27,12 +27,12 @@ namespace DumpDNS
             int fullBytes = prefixLength / 8;
             int remainingBits = prefixLength % 8;
 
-            for(int i = 0; i < fullBytes; i++)
+            for (int i = 0; i < fullBytes; i++)
             {
                 if (ipBytes[i] != baseBytes[i]) return false;
             }
 
-            if(remainingBits > 0)
+            if (remainingBits > 0)
             {
                 int mask = (byte)~(25 >> remainingBits);
                 if ((ipBytes[fullBytes] & mask) != (baseBytes[fullBytes] & mask))

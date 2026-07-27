@@ -50,7 +50,7 @@ namespace DumpDNS.CLI
         {
             string str = "";
 
-            for(int i = 0; i < FormatOptions.Count; i++)
+            for (int i = 0; i < FormatOptions.Count; i++)
             {
                 if (i != 0) str += "\n  ";
                 else str += "  ";
@@ -141,9 +141,10 @@ namespace DumpDNS.CLI
             };
             rootCommand.SetAction((result) =>
             {
-                if(result.Errors.Count == 0 &&
+                if (result.Errors.Count == 0 &&
                     result.GetValue(domain) is string parsedDomain
-                ) {
+                )
+                {
                     var parsedDump = result.GetValue(dump);
                     var parsedDNS = result.GetValue(dns);
                     var parsedDNSPort = result.GetValue(dnsPort);
@@ -153,7 +154,7 @@ namespace DumpDNS.CLI
                     var parsedFormat = result.GetValue(format);
                     var parsedDepth = result.GetValue(depth);
 
-                    if(dump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
+                    if (dump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
 
                     return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, parsedColour, parsedFormat, parsedDump, parsedDepth);
                 }
