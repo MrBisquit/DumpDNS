@@ -10,8 +10,11 @@ namespace DumpDNS.Functionality
     {
         public static int Padding = 15;
 
-        public static void CreateDump(string path, string domain)
+        public static void CreateDump(string path, string domain, List<Types.DnsRecordType>? records = null)
         {
+            if (records == null)
+                records = Types.RecordTypes.ToList();
+
             FileStream fs = File.Open(path, FileMode.OpenOrCreate);
             StreamWriter writer = new StreamWriter(fs);
 
@@ -21,7 +24,9 @@ namespace DumpDNS.Functionality
             writer.WriteLine($"* Record types included in this dump:");
             for (int i = 0; i < Types.RecordTypes.Length; i++)
             {
-                writer.WriteLine($"\t* {Types.DNSRecordTypeDictionary[Types.RecordTypes[i]]}");
+                // Obviously not the best way to do this, this needs changing later
+                if (records.Contains(Types.RecordTypes[i]))
+                    writer.WriteLine($"\t* {Types.DNSRecordTypeDictionary[Types.RecordTypes[i]]}");
             }
             writer.WriteLine($"* DNS servers (NameServers) used:");
             var ns = Dump.client.NameServers.ToArray();
@@ -35,6 +40,9 @@ namespace DumpDNS.Functionality
             // Contents
             for (int i = 0; i < Types.RecordTypes.Length; i++)
             {
+                // Change later
+                if (!records.Contains(Types.RecordTypes[i])) continue;
+
                 writer.WriteLine($"RECORD TYPE: {Types.DNSRecordTypeDictionary[Types.RecordTypes[i]]}");
                 writer.Write(Types.IRecords[Types.RecordTypes[i]].Dump()); // Dump it's contents
                 writer.WriteLine($"\n{new string('-', 52)}\n");

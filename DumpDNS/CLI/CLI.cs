@@ -21,6 +21,45 @@ namespace DumpDNS.CLI
         //
         // Replace dashes with forward slashes for weird windows
 
+        public enum Format
+        {
+            None,
+            JSON,           // Dictionary
+            JSONList,       // List
+            ScriptFriendly, // Output is script-friendly
+            Fancy           // Fancy output
+        }
+
+        public static Dictionary<Format, string> FormatOptions = new()
+        {
+            { Format.None,              "Normal console output" },
+            { Format.JSON,              "Outputs information as a JSON dictionary" },
+            { Format.JSONList,          "Outputs information as a JSON list" },
+            { Format.ScriptFriendly,    "Outputs information that is easy to use in scripts" },
+            { Format.Fancy,             "Fancy output with colours" }
+        };
+
+        public enum Depth
+        {
+            Minimal,
+            Medium,
+            Full
+        }
+
+        public static string FormatOptionsAsString()
+        {
+            string str = "";
+
+            for(int i = 0; i < FormatOptions.Count; i++)
+            {
+                if (i != 0) str += "\n  ";
+                else str += "  ";
+                str += $"{((Format)i).ToString() + ":",-15} {FormatOptions[(Format)i]}";
+            }
+
+            return str;
+        }
+
         public static int Run(string[] args)
         {
             Argument<string> domain = new("Domain")
@@ -74,6 +113,20 @@ namespace DumpDNS.CLI
                 DefaultValueFactory = _ => { return false; }
             };
 
+            Option<Format> format = new("--format", "-f", "/format", "/f")
+            {
+                Description = "Specifies the output format, options:\n" +
+                $"{FormatOptionsAsString()}",
+                DefaultValueFactory = _ => { return Format.None; }
+            };
+
+            Option<Depth> depth = new("--depth", "-dt", "/depth", "/dt")
+            {
+                Description = "The depth of the information returned, the deeper the information, " +
+                "the longer it takes to fetch.",
+                DefaultValueFactory = _ => { return Depth.Minimal; }
+            };
+
             RootCommand rootCommand = new("DumpDNS")
             {
                 domain,
@@ -82,7 +135,9 @@ namespace DumpDNS.CLI
                 dnsPort,
                 records,
                 stats,
-                colour
+                colour,
+                format,
+                depth
             };
             rootCommand.SetAction((result) =>
             {
@@ -95,10 +150,12 @@ namespace DumpDNS.CLI
                     var parsedRecords = result.GetValue(records);
                     var parsedStats = result.GetValue(stats);
                     var parsedColour = result.GetValue(colour);
+                    var parsedFormat = result.GetValue(format);
+                    var parsedDepth = result.GetValue(depth);
 
-                    Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
+                    if(dump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
 
-                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, parsedColour);
+                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, parsedColour, parsedFormat, parsedDump, parsedDepth);
                 }
 
                 foreach (var error in result.Errors)

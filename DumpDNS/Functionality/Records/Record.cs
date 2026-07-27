@@ -17,5 +17,6 @@ namespace DumpDNS.Functionality.Records
         void FetchData(string domain);
         string Dump();
         int Count();
+        void Results(CLI.CLI.Depth depth, bool colour, int i);
     }
 }

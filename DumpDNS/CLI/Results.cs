@@ -9,16 +9,21 @@ namespace DumpDNS.CLI
 {
     public static class Results
     {
-        public static void DisplayResultTotals(List<Types.DnsRecordType> records, bool colour)
+        public static void DisplayResultTotals(List<Types.DnsRecordType> records, bool colour, CLI.Depth depth)
         {
             Console.WriteLine("Results returned:");
             foreach (var record in records)
             {
-                Console.WriteLine($"\t{record}: {Types.IRecords[record].Rows.Count}");
+                Console.Write($"\t{record}:\t");
+                if (colour) Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine($"{Types.IRecords[record].Rows.Count}");
+                if (colour) Console.ResetColor();
             }
         }
 
-        public static void DisplayResults(List<Types.DnsRecordType> records, bool colour)
+        public static int ResultsPadding = 15;
+
+        public static void DisplayResults(List<Types.DnsRecordType> records, bool colour, CLI.Depth depth)
         {
             foreach (var item in records)
             {
@@ -29,15 +34,20 @@ namespace DumpDNS.CLI
                     var row = record.Rows[i];
                     Console.WriteLine($"{item} Record\t({i + 1} of {record.Rows.Count})");
 
-                    for(int j = 0; j < row.Count; j++)
+                    if(depth == CLI.Depth.Minimal)
                     {
-                        Console.Write($"\t{(j + 1).ToString().PadLeft(2, '0')} ");
-                        string header = (record.Headers.Count >= j ? record.Headers[j] : "?") + ":";
-                        Console.Write(header.PadRight(15));
-                        if (colour) Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine($"{row[j]}");
-                        if (colour) Console.ResetColor();
+                        for (int j = 0; j < row.Count; j++)
+                        {
+                            Console.Write($"\t{(j + 1).ToString().PadLeft(2, '0')} ");
+                            string header = (record.Headers.Count >= j ? record.Headers[j] : "?") + ":";
+                            Console.Write(header.PadRight(ResultsPadding));
+                            if (colour) Console.ForegroundColor = ConsoleColor.White;
+                            Console.WriteLine($"{row[j]}");
+                            if (colour) Console.ResetColor();
+                        }
                     }
+                    else
+                        record.Results(depth, colour, i);
                 }
             }
         }

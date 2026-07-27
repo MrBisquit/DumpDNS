@@ -61,5 +61,10 @@ namespace DumpDNS.Functionality.Records
         }
 
         public int Count() => records.Length;
+
+        public void Results(CLI.CLI.Depth depth, bool colour, int i)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

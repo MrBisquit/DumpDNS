@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DumpDNS.Functionality;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,7 +10,7 @@ namespace DumpDNS.CLI
 {
     public static class Dump
     {
-        public static int StartDump(string domain, IPAddress? dns, int port, List<Types.DnsRecordType>? records, bool statistics, bool colour)
+        public static int StartDump(string domain, IPAddress? dns, int port, List<Types.DnsRecordType>? records, bool statistics, bool colour, CLI.Format format, string? dump, CLI.Depth depth)
         {
             records ??= [.. Types.RecordTypes];
             records.Sort();
@@ -32,8 +33,20 @@ namespace DumpDNS.CLI
                 }
             }
 
-            if(statistics) Results.DisplayResultTotals(records, colour);
-            Results.DisplayResults(records, colour);
+            if(depth > CLI.Depth.Minimal)
+            {
+                // Looks up things such as IP Addresses in CIDR ranges
+                Ranges.LoadRanges();
+            }
+
+            if(dump != null)
+            {
+                DumpFile.CreateDump(dump, domain, records);
+            } else
+            {
+                if (statistics) Results.DisplayResultTotals(records, colour, depth);
+                Results.DisplayResults(records, colour, depth);
+            }
 
             return 0;
         }

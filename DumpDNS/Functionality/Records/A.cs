@@ -59,5 +59,41 @@ namespace DumpDNS.Functionality.Records
         }
 
         public int Count() => records.Length;
+
+        public void Results(CLI.CLI.Depth depth, bool colour, int i)
+        {
+            // Look up the IP Address on the CIDR ranges
+            var sources = Ranges.Find(records[i].Address, Ranges.Family.IPv4);
+            Console.Write($"\t{(Headers[0] + ":").PadRight(CLI.Results.ResultsPadding)}");
+            if (colour) Console.ForegroundColor = ConsoleColor.White;
+            Console.Write(records[i].Address);
+            if (colour) Console.ResetColor();
+            if (sources.Count == 0) Console.WriteLine("\t(No sources)");
+            else Console.Write("\t(");
+            for(int j = 0; j < sources.Count; j++)
+            {
+                if(colour) Console.ForegroundColor = sources[j].Colour;
+                Console.Write(sources[j].Label);
+                if(colour) Console.ResetColor();
+                if (j != sources.Count - 1) Console.Write(", ");
+            }
+            if (sources.Count == 0) Console.WriteLine();
+            else Console.WriteLine(")");
+
+            Console.Write($"\t{(Headers[1] + ":").PadRight(CLI.Results.ResultsPadding)}");
+            if (colour) Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(records[i].DomainName);
+            if (colour) Console.ResetColor();
+
+            Console.Write($"\t{(Headers[2] + ":").PadRight(CLI.Results.ResultsPadding)}");
+            if (colour) Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(records[i].TimeToLive);
+            if (colour) Console.ResetColor();
+
+            Console.Write($"\t{(Headers[3] + ":").PadRight(CLI.Results.ResultsPadding)}");
+            if (colour) Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(records[i].InitialTimeToLive);
+            if (colour) Console.ResetColor();
+        }
     }
 }
