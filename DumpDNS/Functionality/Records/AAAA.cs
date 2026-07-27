@@ -65,19 +65,26 @@ namespace DumpDNS.Functionality.Records
             var sources = Ranges.Find(records[i].Address, Ranges.Family.IPv6);
             Console.Write($"\t{(Headers[0] + ":").PadRight(CLI.Results.ResultsPadding)}");
             if (colour) Console.ForegroundColor = ConsoleColor.White;
-            Console.Write(records[i].Address);
+            Console.WriteLine(records[i].Address);
             if (colour) Console.ResetColor();
-            if (sources.Count == 0) Console.WriteLine("\t(No sources)");
-            else Console.Write("\t(");
-            for (int j = 0; j < sources.Count; j++)
+            if (sources.Item1.Count != 0)
+                Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}Belongs to");
+            for (int j = 0; j < sources.Item1.Count; j++)
             {
-                if (colour) Console.ForegroundColor = sources[j].Colour;
-                Console.Write(sources[j].Label);
+                Console.Write($"\t{new string(' ', CLI.Results.ResultsPadding)}\t");
+                if (colour) Console.ForegroundColor = sources.Item1[j].Colour;
+                Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}\t" + sources.Item1[j].Label);
                 if (colour) Console.ResetColor();
-                if (j != sources.Count - 1) Console.Write(", ");
             }
-            if (sources.Count == 0) Console.WriteLine();
-            else Console.WriteLine(")");
+            if (sources.Item2.Count != 0)
+                Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}CIDRs");
+            for (int j = 0; j < sources.Item2.Count; j++)
+            {
+                Console.Write($"\t{new string(' ', CLI.Results.ResultsPadding)}\t");
+                if (colour) Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine($"\t{new string(' ', CLI.Results.ResultsPadding)}\t" + sources.Item2[j]);
+                if (colour) Console.ResetColor();
+            }
 
             Console.Write($"\t{(Headers[1] + ":").PadRight(CLI.Results.ResultsPadding)}");
             if (colour) Console.ForegroundColor = ConsoleColor.White;

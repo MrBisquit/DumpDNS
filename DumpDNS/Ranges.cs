@@ -65,6 +65,8 @@ namespace DumpDNS
             string area = "Ungrouped";
             for (int i = 0; i < sourceLines.Length; i++)
             {
+                if (sourceLines[i].Length == 0 || sourceLines[i][0] == ';') continue;
+
                 string[] split = sourceLines[i].Split(",");
                 if (split.Length == 2)
                 {
@@ -183,6 +185,8 @@ namespace DumpDNS
             string area = "Ungrouped";
             for (int i = 0; i < sources.Length; i++)
             {
+                if (sources[i].Length == 0 || sources[i][0] == ';') continue;
+
                 string[] split = sources[i].Split(",");
                 if (split.Length == 1)
                 {
@@ -205,21 +209,27 @@ namespace DumpDNS
             //Sources = sources;
             //NeedsUpdating = update;
         }
-        public static List<Source> Find(IPAddress ip, Family family)
+        public static (List<Source>, List<string>) Find(IPAddress ip, Family family)
         {
             List<Source> sources = [];
+            List<string> CIDRs = [];
             foreach (var source in Sources)
             {
                 foreach(var range in source.Value.Ranges)
                 {
                     if (range.Family == family)
+                    {
                         if (Utils.IsIPInCIDR(ip, range.CIDR))
-                            if(!sources.Contains(source.Value))
+                        {
+                            if (!sources.Contains(source.Value))
                                 sources.Add(source.Value);
+                            CIDRs.Add(range.CIDR);
+                        }
+                    }
                 }
             }
 
-            return sources;
+            return (sources, CIDRs);
         }
     }
 }
