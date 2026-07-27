@@ -87,7 +87,7 @@ jobs:
 
                     | Platform | File | Notes |
                     |----------|------|-------|
-                    | Windows | `DumpDNS-${{ needs.build-installer-windows.outputs.version }}-setup.exe` | Run the installer, requires the .NET ${{ env.DOTNET_HUMAN }} SDK |
+                    | Windows | `DumpDNS-${{ needs.build-installer-windows.outputs.version }}-setup.exe` | Run the installer, requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
 
                     ### Prerequisites
 
