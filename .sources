@@ -1,3 +1,3 @@
 Cloudflare,Yellow
-IPv4,https://www.cloudflare.com/ips-v4/
-IPv6,https://www.cloudflare.com/ips-v6/
+IPv4,https://www.cloudflare.com/ips-v4/,source
+IPv6,https://www.cloudflare.com/ips-v6/,source
