@@ -136,7 +136,7 @@ namespace DumpDNS.CLI
                 records,
                 stats,
                 colour,
-                format,
+                //format,
                 depth
             };
             rootCommand.SetAction((result) =>

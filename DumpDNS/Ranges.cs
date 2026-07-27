@@ -211,7 +211,7 @@ namespace DumpDNS
         }
         public static (List<Source>, List<string>) Find(IPAddress ip, Family family)
         {
-            List<Source> sources = [];
+            HashSet<Source> sources = [];
             List<string> CIDRs = [];
             foreach (var source in Sources)
             {
@@ -221,15 +221,14 @@ namespace DumpDNS
                     {
                         if (Utils.IsIPInCIDR(ip, range.CIDR))
                         {
-                            if (!sources.Contains(source.Value))
-                                sources.Add(source.Value);
+                            sources.Add(source.Value);
                             CIDRs.Add(range.CIDR);
                         }
                     }
                 }
             }
 
-            return (sources, CIDRs);
+            return (sources.ToList(), CIDRs);
         }
     }
 }

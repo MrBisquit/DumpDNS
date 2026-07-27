@@ -62,7 +62,7 @@ namespace DumpDNS.Functionality.Records
 
         public void Results(CLI.CLI.Depth depth, bool colour, int i)
         {
-            throw new NotImplementedException();
+            Console.WriteLine("\tNot implemented, please use a lower detail mode");
         }
     }
 }
