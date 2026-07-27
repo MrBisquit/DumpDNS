@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DumpDNS
 {
@@ -15,8 +16,8 @@ namespace DumpDNS
     {
         public enum Family
         {
-            IPv4,
-            IPv6
+            IPv4 = 4,
+            IPv6 = 6
         }
 
         public class Source
@@ -37,20 +38,12 @@ namespace DumpDNS
         public static string SourceList = Path.Combine(Dir, ".sources");
         public static string SourcesPath = Path.Combine(Dir, ".data");
         public static string UpdatePath = Path.Combine(Dir, ".source_update");
-        public static string SourcePath = "";
+        public static string SourcePath = "https://github.com/MrBisquit/DumpDNS/raw/refs/heads/master/.sources";
 
-        public static Dictionary<string, Source> Sources = new();
+        public static Dictionary<string, Source> Sources = [];
         public static DateTime NeedsUpdating = new();
-        public static void UpdateRanges()
+        public static void LoadSources()
         {
-            if(!Directory.Exists(Dir))
-                Directory.CreateDirectory(Dir);
-
-            Sources.Clear();
-
-            // Read (or download) the source list
-            // Then parse the source list
-
             string sourceText;
 
             if (File.Exists(SourceList))
@@ -73,19 +66,54 @@ namespace DumpDNS
             for (int i = 0; i < sourceLines.Length; i++)
             {
                 string[] split = sourceLines[i].Split(",");
-                if(split.Length == 2)
-                {
-                    Sources[area].Sources.Add(new((Family)int.Parse(split[0]), split[1]));
-                } else if(split.Length == 3)
+                if (split.Length == 2)
                 {
                     area = split[0];
-                    Sources[area].Label = split[0];
-                    Sources[area].Colour = (ConsoleColor)int.Parse(split[1]);
+                    Sources.TryAdd(area, new Source { Label = split[0], Colour = (ConsoleColor)int.Parse(split[1]) });
+                }
+                else if (split.Length == 3)
+                {
+                    Sources[area].Sources.Add(new((Family)int.Parse(split[0]), split[1]));
                 }
             }
+        }
+        public static void UpdateRanges()
+        {
+            if(!Directory.Exists(Dir))
+                Directory.CreateDirectory(Dir);
+
+            Sources.Clear();
+            Sources.Add("Ungrouped", new Source { Label = "Ungrouped", Colour = ConsoleColor.Gray });
+
+            // Read (or download) the source list
+            // Then parse the source list
+
+            LoadSources();
 
             // Download the data from the source list
             // Then parse, and save the data for later
+
+            foreach (var source in Sources)
+            {
+                foreach (var item in source.Value.Sources)
+                {
+                    using HttpClient client = new();
+
+                    Task<byte[]> d = client.GetByteArrayAsync(item.Item2);
+                    d.Wait();
+                    string[] lines = Encoding.Default.GetString(d.Result).Split('\n');
+                    foreach (var line in lines)
+                    {
+                        if (line == "") continue;
+
+                        Sources[source.Key].Ranges.Add(new Range
+                        {
+                            CIDR = line,
+                            Family = item.Item1
+                        });
+                    }
+                }
+            }
 
             /*foreach (var source in DefaultSources)
             {
@@ -115,7 +143,17 @@ namespace DumpDNS
 
             NeedsUpdating = DateTime.Now.AddDays(1);
 
-            File.WriteAllText(SourcesPath, JsonSerializer.Serialize(Sources));
+            List<string> rangesLines = [];
+            foreach(var key in Sources)
+            {
+                rangesLines.Add(key.Key);
+                foreach (var range in key.Value.Ranges)
+                {
+                    rangesLines.Add($"{(int)range.Family},{range.CIDR}");
+                }
+            }
+            File.WriteAllLines(SourcesPath, rangesLines);
+            //File.WriteAllText(SourcesPath, JsonSerializer.Serialize(Sources));
             File.WriteAllText(UpdatePath, JsonSerializer.Serialize(NeedsUpdating));
             List<string> newSourceLines = [];
             foreach (var key in Sources.Keys)
@@ -139,30 +177,47 @@ namespace DumpDNS
                 return;
             }
 
-            var sources = JsonSerializer.Deserialize<List<Source>>(File.ReadAllText(SourcesPath));
+            LoadSources();
+
+            var sources = File.ReadAllLines(SourcesPath);
+            string area = "Ungrouped";
+            for (int i = 0; i < sources.Length; i++)
+            {
+                string[] split = sources[i].Split(",");
+                if (split.Length == 1)
+                {
+                    area = split[0];
+                }
+                else if (split.Length == 2)
+                {
+                    Sources[area].Ranges.Add(new Range { Family = (Family)int.Parse(split[0]), CIDR = split[1] });
+                }
+            }
+
+            //var sources = JsonSerializer.Deserialize<List<Source>>(File.ReadAllText(SourcesPath));
             var update = JsonSerializer.Deserialize<DateTime>(File.ReadAllText(UpdatePath));
-            if (sources == null || update <= DateTime.Now)
+            if (sources.Length == 0 || update <= DateTime.Now)
             {
                 UpdateRanges();
                 return;
             }
 
             //Sources = sources;
-            NeedsUpdating = update;
+            //NeedsUpdating = update;
         }
         public static List<Source> Find(IPAddress ip, Family family)
         {
             List<Source> sources = [];
-            /*foreach (var source in Sources)
+            foreach (var source in Sources)
             {
-                foreach(var range in source.Ranges)
+                foreach(var range in source.Value.Ranges)
                 {
                     if (range.Family == family)
                         if (Utils.IsIPInCIDR(ip, range.CIDR))
-                            if(!sources.Contains(source))
-                                sources.Add(source);
+                            if(!sources.Contains(source.Value))
+                                sources.Add(source.Value);
                 }
-            }*/
+            }
 
             return sources;
         }
