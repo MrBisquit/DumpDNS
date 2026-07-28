@@ -1,0 +1,31 @@
+root = true
+
+[*.cs]
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Usings and ordering
+dotnet_sort_system_directives_first = true:warning
+dotnet_separate_import_directive_groups = true:warning
+
+# Qualification rules
+dotnet_style_qualification_for_field = false:warning
+dotnet_style_qualification_for_property = false:warning
+dotnet_style_qualification_for_method = false:warning
+
+# Analyzer examples
+dotnet_diagnostic.IDE0005.severity = warning   # Remove unused usings
+dotnet_diagnostic.SA1200.severity = warning    # Using placement
+dotnet_diagnostic.RCS1213.severity = warning   # Remove unused members
+
+# Disable StyleCop file header & XML comment rules
+dotnet_diagnostic.SA1633.severity = none   # File must have a header
+dotnet_diagnostic.SA1636.severity = none   # Header text must match
+dotnet_diagnostic.SA1638.severity = none   # File header must include filename
+dotnet_diagnostic.SA0001.severity = none   # Disable XML comment analysis warning
+dotnet_diagnostic.CS1591.severity = none   # Ignore "missing XML comment" warnings
+dotnet_diagnostic.IDE0005.severity = none
