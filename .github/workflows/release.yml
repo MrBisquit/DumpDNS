@@ -36,6 +36,8 @@ jobs:
         name: Windows Installer
         runs-on: windows-latest
         needs: [determine-version]
+        permissions:
+          contents: read
 
         steps:
           - name: Checkout
@@ -77,6 +79,8 @@ jobs:
         name: Build (${{ matrix.rid }})
         runs-on: ${{ matrix.os }}
         needs: [determine-version]
+        permissions:
+          contents: read
 
         strategy:
             fail-fast: false
