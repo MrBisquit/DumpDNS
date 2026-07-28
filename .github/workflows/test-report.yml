@@ -40,12 +40,12 @@ jobs:
           - name: Checkout repository (pull_request)
             if: github.event_name == 'pull_request'
             uses: actions/checkout@v4
-          - name: Checkout repository (issue_comment)
-            if: github.event_name == 'issue_comment'
-            uses: actions/checkout@v4
-            with:
-                repository: ${{ github.event.pull_request.head.repo.full_name }}
-                ref: ${{ github.event.pull_request.head.sha }}
+          #- name: Checkout repository (issue_comment)
+          #  if: github.event_name == 'issue_comment'
+          #  uses: actions/checkout@v4
+          #  with:
+          #      repository: ${{ github.event.pull_request.head.repo.full_name }}
+          #      ref: ${{ github.event.pull_request.head.sha }}
 
             # Set up .NET 8.0
           - name: Setup .NET
