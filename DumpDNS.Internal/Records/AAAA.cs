@@ -34,7 +34,7 @@ public class AAAA : IRecord<AaaaRecord>
         {
             data.Rows.Add([
                 new(record.Address.ToString(),              Types.TableDataRowType.IPAddrv6),
-                new(record.DomainName,                      Types.TableDataRowType.Domain),
+                new(record.DomainName.Original,             Types.TableDataRowType.Domain),
                 new(record.TimeToLive.ToString(),           Types.TableDataRowType.TTL),
                 new(record.InitialTimeToLive.ToString(),    Types.TableDataRowType.ITTL)
             ]);

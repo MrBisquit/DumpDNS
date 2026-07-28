@@ -34,7 +34,7 @@ public class CNAME : IRecord<CNameRecord>
         {
             data.Rows.Add([
                 new(record.CanonicalName,                   Types.TableDataRowType.Text),
-                new(record.DomainName,                      Types.TableDataRowType.Domain),
+                new(record.DomainName.Original,             Types.TableDataRowType.Domain),
                 new(record.TimeToLive.ToString(),           Types.TableDataRowType.TTL),
                 new(record.InitialTimeToLive.ToString(),    Types.TableDataRowType.ITTL)
             ]);

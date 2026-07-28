@@ -36,7 +36,7 @@ public class CAA : IRecord<CaaRecord>
                 new(record.Value,                           Types.TableDataRowType.Text),
                 new(record.Tag,                             Types.TableDataRowType.Text),
                 new(record.Flags.ToString(),                Types.TableDataRowType.Bytes),
-                new(record.DomainName,                      Types.TableDataRowType.Domain),
+                new(record.DomainName.Original,             Types.TableDataRowType.Domain),
                 new(record.TimeToLive.ToString(),           Types.TableDataRowType.TTL),
                 new(record.InitialTimeToLive.ToString(),    Types.TableDataRowType.ITTL)
             ]);

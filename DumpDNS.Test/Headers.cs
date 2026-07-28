@@ -45,5 +45,32 @@ namespace DumpDNS.Test
 
             Assert.NotEmpty(table.Headers);
         }
+
+        [Fact]
+        public void Record_CNAME()
+        {
+            var a = new Internal.Records.CNAME();
+            var table = a.FetchTable(new Query("*"));
+
+            Assert.NotEmpty(table.Headers);
+        }
+
+        [Fact]
+        public void Record_MX()
+        {
+            var a = new Internal.Records.MX();
+            var table = a.FetchTable(new Query("*"));
+
+            Assert.NotEmpty(table.Headers);
+        }
+
+        [Fact]
+        public void Record_NAPTR()
+        {
+            var a = new Internal.Records.NAPTR();
+            var table = a.FetchTable(new Query("*"));
+
+            Assert.NotEmpty(table.Headers);
+        }
     }
 }

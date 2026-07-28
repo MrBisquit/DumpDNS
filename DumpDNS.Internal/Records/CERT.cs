@@ -35,7 +35,7 @@ public class CERT : IRecord<CertRecord>
             data.Rows.Add([
                 new(record.Algorithm.ToString(),            Types.TableDataRowType.Text),
                 new(record.CertType.ToString(),             Types.TableDataRowType.Text),
-                new(record.DomainName,                      Types.TableDataRowType.Domain),
+                new(record.DomainName.Original,             Types.TableDataRowType.Domain),
                 new(record.TimeToLive.ToString(),           Types.TableDataRowType.TTL),
                 new(record.InitialTimeToLive.ToString(),    Types.TableDataRowType.ITTL),
                 new(record.PublicKeyAsString,               Types.TableDataRowType.Text)
