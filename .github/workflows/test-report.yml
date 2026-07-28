@@ -1,0 +1,75 @@
+name: PR Test Report
+
+on:
+    pull_request:
+        types: [opened, synchronize, labeled]
+        branches:
+          - master
+
+    issue_comment:
+        types: [created]
+
+jobs:
+    test:
+        if: >-
+            (
+                github.event_name == 'pull_request' &&
+                contains(github.event.pull_request.labels.*.name, 'run-ci')
+            ) ||
+            (
+                github.event_name == 'issue_comment' &&
+                github.event.issue.pull_request &&
+                contains(github.event.comment.body, '/run tests') &&
+                (
+                    github.event.comment.author_association == 'OWNER' ||
+                    github.event.comment.author_association == 'MEMBER' ||
+                    github.event.comment.author_association == 'COLLABORATOR' ||
+                    github.event.comment.author_association == 'CONTRIBUTOR'
+                )
+            )
+
+        runs-on: ubuntu-latest
+
+        permissions:
+          contents: read
+          checks: write
+          pull-requests: write
+
+        steps:
+            # Checkout repository
+          - name: Checkout repository (pull_request)
+            if: github.event_name == 'pull_request'
+            uses: actions/checkout@v4
+          - name: Checkout repository (issue_comment)
+            if: github.event_name == 'issue_comment'
+            uses: actions/checkout@v4
+            with:
+                ref: refs/pull/${{ github.event.issue.number }}/head
+
+            # Set up .NET 8.0
+          - name: Setup .NET
+            uses: actions/setup-dotnet@v4
+            with:
+                dotnet-version: '8.0.x'
+
+            # Restore all of the dependencies
+          - name: Restore dependencies
+            run: dotnet restore
+
+            # Run the tests
+          - name: Run tests
+            run: dotnet test --logger "trx;LogFileName=test_results.trx" --results-directory ./TestResults
+
+            # Comment the results on the PR as a table
+          - name: Publish Test Report
+            uses: EnricoMi/publish-unit-test-result-action@v2
+            if: always()
+            with:
+                files: TestResults/*.trx
+                check_name: Unit Tests
+
+          #- name: Publish results
+          #  uses: marocchino/sticky-pull-request-comment@v2
+          #  with:
+          #      header: test-report
+          #      path: comment.md
