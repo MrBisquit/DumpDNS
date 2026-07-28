@@ -11,7 +11,12 @@ public class CNAME : IRecord<CNameRecord>
     internal List<CNameRecord> _data = [];
     public CNameRecord[] Data { get { return [.._data]; } }
 
-    public async Task FetchData(LookupClient client, Types.LookupInfo info)
+    public void FetchData(LookupClient client, Types.LookupInfo info)
+    {
+        FetchDataAsync(client, info).Wait();
+    }
+
+    public async Task FetchDataAsync(LookupClient client, Types.LookupInfo info)
     {
         IDnsQueryResponse response = await client.QueryAsync(info.Domain, QueryType.CNAME);
         _data.AddRange(response.AllRecords.CnameRecords());

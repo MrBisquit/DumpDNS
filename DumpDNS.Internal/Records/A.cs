@@ -11,7 +11,12 @@ public class A : IRecord<ARecord>
     internal List<ARecord> _data = [];
     public ARecord[] Data { get { return [.._data]; } }
 
-    public async Task FetchData(LookupClient client, Types.LookupInfo info)
+    public void FetchData(LookupClient client, Types.LookupInfo info)
+    {
+        FetchDataAsync(client, info).Wait();
+    }
+
+    public async Task FetchDataAsync(LookupClient client, Types.LookupInfo info)
     {
         IDnsQueryResponse response = await client.QueryAsync(info.Domain, QueryType.A);
         _data.AddRange(response.AllRecords.ARecords());

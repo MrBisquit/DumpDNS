@@ -11,7 +11,12 @@ public class CERT : IRecord<CertRecord>
     internal List<CertRecord> _data = [];
     public CertRecord[] Data { get { return [.._data]; } }
 
-    public async Task FetchData(LookupClient client, Types.LookupInfo info)
+    public void FetchData(LookupClient client, Types.LookupInfo info)
+    {
+        FetchDataAsync(client, info).Wait();
+    }
+
+    public async Task FetchDataAsync(LookupClient client, Types.LookupInfo info)
     {
         IDnsQueryResponse response = await client.QueryAsync(info.Domain, QueryType.CERT);
         _data.AddRange(response.AllRecords.CertRecords());

@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumpDNS.Internal", "DumpDNS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DumpDNS.Test", "DumpDNS.Test\DumpDNS.Test.csproj", "{F53BDD06-0038-4759-B4F9-251553ECA789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DNSClient", "DNSClient\DNSClient.csproj", "{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,18 +55,6 @@ Global
 		{F53BDD06-0038-4759-B4F9-251553ECA789}.Release|x86.Build.0 = Release|Any CPU
 		{F53BDD06-0038-4759-B4F9-251553ECA789}.Release|x64.ActiveCfg = Release|Any CPU
 		{F53BDD06-0038-4759-B4F9-251553ECA789}.Release|x64.Build.0 = Release|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Debug|x86.Build.0 = Debug|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Debug|x64.Build.0 = Debug|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Release|x86.ActiveCfg = Release|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Release|x86.Build.0 = Release|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Release|x64.ActiveCfg = Release|Any CPU
-		{3FA2B180-2DC9-48B0-93D0-1C9682EEA333}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,8 @@ namespace DumpDNS.Internal
         T[] Data { get; }
 
         // Fetch the data from the LookupClient, and store within the Data argument
-        Task FetchData(LookupClient client, Types.LookupInfo info);
+        void FetchData(LookupClient client, Types.LookupInfo info);
+        Task FetchDataAsync(LookupClient client, Types.LookupInfo info);
 
         Types.TableData FetchTable(Query query);
     }
