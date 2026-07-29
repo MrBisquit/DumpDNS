@@ -9,7 +9,7 @@ public class NAPTR : IRecord<NAPtrRecord>
     public Types.DnsRecordType RecordType { get; } = Types.DnsRecordType.NAPTR;
 
     internal List<NAPtrRecord> _data = [];
-    public NAPtrRecord[] Data { get { return [.._data]; } }
+    public NAPtrRecord[] Data { get { return [.. _data]; } }
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
@@ -26,7 +26,7 @@ public class NAPTR : IRecord<NAPtrRecord>
     {
         Types.TableData data = new()
         {
-            Headers = [ "Domain", "Flags", "TTL", "Initial TTL", "Order", "Preference", "Regex", "Replacement", "Services" ],
+            Headers = ["Domain", "Flags", "TTL", "Initial TTL", "Order", "Preference", "Regex", "Replacement", "Services"],
             Rows = []
         };
 

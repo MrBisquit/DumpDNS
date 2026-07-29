@@ -9,7 +9,7 @@ public class MX : IRecord<MxRecord>
     public Types.DnsRecordType RecordType { get; } = Types.DnsRecordType.MX;
 
     internal List<MxRecord> _data = [];
-    public MxRecord[] Data { get { return [.._data]; } }
+    public MxRecord[] Data { get { return [.. _data]; } }
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
@@ -26,7 +26,7 @@ public class MX : IRecord<MxRecord>
     {
         Types.TableData data = new()
         {
-            Headers = [ "Exchange", "Domain", "Preference", "TTL", "Initial TTL" ],
+            Headers = ["Exchange", "Domain", "Preference", "TTL", "Initial TTL"],
             Rows = []
         };
 

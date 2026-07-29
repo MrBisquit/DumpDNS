@@ -1,4 +1,3 @@
-﻿using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Octokit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DumpDNS

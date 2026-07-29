@@ -1,4 +1,3 @@
-﻿using Octokit;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -6,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Octokit;
 
 namespace DumpDNS.Functionality
 {

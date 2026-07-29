@@ -1,5 +1,5 @@
-﻿using DnsClient;
 using System.Text;
+using DnsClient;
 
 namespace DumpDNS
 {

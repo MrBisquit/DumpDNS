@@ -9,7 +9,7 @@ public class CAA : IRecord<CaaRecord>
     public Types.DnsRecordType RecordType { get; } = Types.DnsRecordType.CAA;
 
     internal List<CaaRecord> _data = [];
-    public CaaRecord[] Data { get { return [.._data]; } }
+    public CaaRecord[] Data { get { return [.. _data]; } }
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
@@ -26,7 +26,7 @@ public class CAA : IRecord<CaaRecord>
     {
         Types.TableData data = new()
         {
-            Headers = [ "Value", "Tag", "Flags", "Domain", "TTL", "Initial TTL" ],
+            Headers = ["Value", "Tag", "Flags", "Domain", "TTL", "Initial TTL"],
             Rows = []
         };
 

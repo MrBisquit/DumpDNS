@@ -1,4 +1,4 @@
-﻿namespace DumpDNS
+namespace DumpDNS
 {
     public static class Types
     {

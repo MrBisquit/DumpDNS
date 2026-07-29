@@ -3,16 +3,16 @@ using System;
 namespace DumpDNS.Internal;
 
 public class Query
-{    
+{
     internal List<Item> _items = [];
     internal string _query;
 
-    public Item[] Items { get { return [.._items]; } }
+    public Item[] Items { get { return [.. _items]; } }
 
     public Query()
     {
         _query = "*";
-        BuildQuery();  
+        BuildQuery();
     }
 
     public Query(string query)
@@ -33,7 +33,7 @@ public class Query
 
     internal void BuildQuery()
     {
-        if(_query == "*")
+        if (_query == "*")
         {
             _items.Add(new Item { Type = ItemType.All });
         }

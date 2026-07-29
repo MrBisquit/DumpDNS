@@ -9,7 +9,7 @@ public class AAAA : IRecord<AaaaRecord>
     public Types.DnsRecordType RecordType { get; } = Types.DnsRecordType.AAAA;
 
     internal List<AaaaRecord> _data = [];
-    public AaaaRecord[] Data { get { return [.._data]; } }
+    public AaaaRecord[] Data { get { return [.. _data]; } }
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
@@ -26,7 +26,7 @@ public class AAAA : IRecord<AaaaRecord>
     {
         Types.TableData data = new()
         {
-            Headers = [ "Address", "Domain", "TLL", "Initial TTL" ],
+            Headers = ["Address", "Domain", "TLL", "Initial TTL"],
             Rows = []
         };
 

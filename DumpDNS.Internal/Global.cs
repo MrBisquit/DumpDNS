@@ -12,4 +12,7 @@ public static class Global
     public static string VersionString = "";
     public static bool VersionUpdateAvailable = false;
     public static bool VersionUnreleased = false;
+
+    // Other information
+    public static int ConcurrentTasks = 5;
 }

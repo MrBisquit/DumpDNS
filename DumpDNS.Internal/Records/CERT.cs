@@ -9,7 +9,7 @@ public class CERT : IRecord<CertRecord>
     public Types.DnsRecordType RecordType { get; } = Types.DnsRecordType.CERT;
 
     internal List<CertRecord> _data = [];
-    public CertRecord[] Data { get { return [.._data]; } }
+    public CertRecord[] Data { get { return [.. _data]; } }
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
@@ -26,7 +26,7 @@ public class CERT : IRecord<CertRecord>
     {
         Types.TableData data = new()
         {
-            Headers = [ "Algorithm", "Type", "Domain", "TTL", "Initial TTL", "Key Tag", "Public Key" ],
+            Headers = ["Algorithm", "Type", "Domain", "TTL", "Initial TTL", "Key Tag", "Public Key"],
             Rows = []
         };
 

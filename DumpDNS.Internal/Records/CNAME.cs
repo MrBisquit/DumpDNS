@@ -9,7 +9,7 @@ public class CNAME : IRecord<CNameRecord>
     public Types.DnsRecordType RecordType { get; } = Types.DnsRecordType.CNAME;
 
     internal List<CNameRecord> _data = [];
-    public CNameRecord[] Data { get { return [.._data]; } }
+    public CNameRecord[] Data { get { return [.. _data]; } }
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
@@ -26,7 +26,7 @@ public class CNAME : IRecord<CNameRecord>
     {
         Types.TableData data = new()
         {
-            Headers = [ "Name", "Domain", "TTL", "Initial TTL" ],
+            Headers = ["Name", "Domain", "TTL", "Initial TTL"],
             Rows = []
         };
 
