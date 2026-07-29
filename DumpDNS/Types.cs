@@ -91,5 +91,41 @@ namespace DumpDNS
             [DnsRecordType.TXT] = new Functionality.Records.TXT(),
             [DnsRecordType.URI] = new Functionality.Records.URI()
         };
+
+        public class SizeAndPos
+        {
+            public int X = 0,
+                Y = 0,
+                Width = 1,
+                Height = 1;
+            
+            /// <summary>
+            /// Left, Top, Right, Down
+            /// </summary>
+            public int[] Padding = new int[4];
+
+            public SizeAndPos((int, int) dimensions)
+            {
+                Width = dimensions.Item1;
+                Height = dimensions.Item2;
+            }
+
+            public SizeAndPos(int x, int y, int width, int height)
+            {
+                X = x;
+                Y = y;
+                Width = width;
+                Height = height;
+            }
+
+            public SizeAndPos(int x, int y, int width, int height, int[] padding)
+            {
+                X = x;
+                Y = y;
+                Width = width;
+                Height = height;
+                Padding = padding;
+            }
+        }
     }
 }
