@@ -98,7 +98,7 @@ namespace DumpDNS
                 Y = 0,
                 Width = 1,
                 Height = 1;
-            
+
             /// <summary>
             /// Left, Top, Right, Down
             /// </summary>
