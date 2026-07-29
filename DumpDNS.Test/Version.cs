@@ -37,7 +37,7 @@ public class Version
     [Fact]
     public void Check_Equals()
     {
-        
+
     }
 
     /*[Fact]

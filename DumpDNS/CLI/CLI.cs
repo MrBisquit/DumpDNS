@@ -67,6 +67,13 @@ namespace DumpDNS.CLI
                 Description = "The domain to query."
             };
 
+            Argument<string> action = new("Action")
+            {
+                Description = "The action to take",
+                Arity = ArgumentArity.ZeroOrOne,
+                DefaultValueFactory = _ => { return "dump"; }
+            };
+
             Option<string> dump = new("--dump", "-d", "/dump", "/d")
             {
                 HelpName = "path",
@@ -130,6 +137,7 @@ namespace DumpDNS.CLI
             RootCommand rootCommand = new("DumpDNS")
             {
                 domain,
+                action,
                 dump,
                 dns,
                 dnsPort,

@@ -10,6 +10,10 @@ public class Version : ITask
 {
     public string TaskName { get; } = "Fetching version information";
 
+    public Guid TaskID { get; } = Guid.NewGuid();
+
+    public HashSet<Guid> WaitingFor { get; set; } = [];
+
     public Action<OngoingTask> Action { get; } = async task =>
     {
         Global.Version = Assembly.GetExecutingAssembly().GetName().Version!.ToString();

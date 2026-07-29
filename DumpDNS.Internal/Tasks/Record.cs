@@ -16,6 +16,10 @@ public class Record<T> : ITask
 
     public string TaskName { get; }
 
+    public Guid TaskID { get; } = Guid.NewGuid();
+
+    public HashSet<Guid> WaitingFor { get; set; } = [];
+
     public Types.LookupInfo Lookup;
     public LookupClient Client;
     public IRecord<T> IRecord;
