@@ -228,7 +228,9 @@ jobs:
 
                     - [.NET ${{ env.DOTNET_HUMAN }} Runtime](https://dot.net/download)
                       - If you install a version with "self-contained" in the name, you do not need this.
+                generate_release_notes: true
                 draft: false
                 prerelease: false
+                
                 files: |
                     installers/**/*

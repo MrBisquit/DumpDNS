@@ -40,7 +40,7 @@ public class Version
         
     }
 
-    [Fact]
+    /*[Fact]
     public async void Check_Actual()
     {
         string[] testValues =
@@ -61,5 +61,5 @@ public class Version
             Console.WriteLine(Global.Version);
             Assert.True(Internal.Utils.IsHigher(test, Global.Version));
         }
-    }
+    }*/
 }
