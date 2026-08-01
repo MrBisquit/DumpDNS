@@ -1,5 +1,5 @@
-﻿using DnsClient;
 using System.Text;
+using DnsClient;
 
 namespace DumpDNS
 {
@@ -54,12 +54,15 @@ namespace DumpDNS
 
             Functionality.Version.StartCheck();
 
+            Internal.ITask.Enqueue(new Internal.Tasks.Version());
+
             while (true)
             {
                 For = "";
                 CanDump = false;
                 Domain = null;
                 Console.Clear();
+                Internal.ITask.StartQueue();
 
                 // First stage, select a domain
                 Functionality.DomainSelection DomainSelection = Functionality.DomainSelection.Start((LastW, LastH));
@@ -201,7 +204,7 @@ namespace DumpDNS
         {
             if (IsSearchBar && searchBar != null) return; // Handled elsewhere
 
-            Console.BackgroundColor = ConsoleColor.White;
+            /*Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
             Console.CursorTop = 0;
             Console.CursorLeft = 0;
@@ -211,7 +214,9 @@ namespace DumpDNS
                 text += " for " + For;
             }
             Console.Write(text + new string(' ', LastW - text.Length));
-            Console.ResetColor();
+            Console.ResetColor();*/
+
+            Components.TopBar.Render(new((LastW, LastH)));
         }
 
         /// <summary>
@@ -252,6 +257,7 @@ namespace DumpDNS
                 Console.Write(Functionality.Version.VersionString);
             }
             Console.ResetColor();
+            Components.StatusBar.Render(new((LastW, LastH)));
         }
     }
 }

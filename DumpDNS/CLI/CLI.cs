@@ -1,6 +1,3 @@
-﻿using DnsClient;
-using DumpDNS.Functionality;
-using DumpDNS.Functionality.Records;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -9,6 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DnsClient;
+using DumpDNS.Functionality;
+using DumpDNS.Functionality.Records;
 
 namespace DumpDNS.CLI
 {
@@ -65,6 +65,13 @@ namespace DumpDNS.CLI
             Argument<string> domain = new("Domain")
             {
                 Description = "The domain to query."
+            };
+
+            Argument<string> action = new("Action")
+            {
+                Description = "The action to take",
+                Arity = ArgumentArity.ZeroOrOne,
+                DefaultValueFactory = _ => { return "dump"; }
             };
 
             Option<string> dump = new("--dump", "-d", "/dump", "/d")
@@ -130,6 +137,7 @@ namespace DumpDNS.CLI
             RootCommand rootCommand = new("DumpDNS")
             {
                 domain,
+                action,
                 dump,
                 dns,
                 dnsPort,

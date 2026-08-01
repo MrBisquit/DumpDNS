@@ -1,4 +1,3 @@
-﻿using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Octokit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace DumpDNS
@@ -219,7 +219,7 @@ namespace DumpDNS
                 {
                     if (range.Family == family)
                     {
-                        if (Utils.IsIPInCIDR(ip, range.CIDR))
+                        if (Internal.Utils.IsIPInCIDR(ip, range.CIDR))
                         {
                             sources.Add(source.Value);
                             CIDRs.Add(range.CIDR);
