@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using DumpDNS.Internal;
 
 namespace DumpDNS.Components;
 
@@ -10,10 +11,12 @@ public class Table : IDisposable
     internal ObservableCollection<string> _headers { get; set; } = [];
     internal ObservableCollection<string[]> _rows { get; set; } = [];
 
+    internal int[] columnWidths;
+
     public string? Title { get; set; }
     public string[] Headers { get { return [.. _headers]; } set { _headers = new(value); } }
     public string[][] Rows { get { return [.. _rows]; } set { _rows = new(value); } }
-    internal List<List<List<string>>> ActualRows = [];
+    internal List<List<(int, string[])>> ActualRows = [];
 
     internal Types.SizeAndPos lastDimensions = new((0, 0));
 
@@ -67,16 +70,16 @@ public class Table : IDisposable
 
     internal void Changed(object? sender, NotifyCollectionChangedEventArgs e)
     {
-
+        FixHeaders();
+        CalculateSize(lastDimensions, true);
+        CalculateWidths(lastDimensions, true);
+        GenerateActualRows();
+        CalculateWidths(lastDimensions, true);
     }
 
     internal void CalculateSize(Types.SizeAndPos dimensions, bool force = false)
     {
         if (dimensions == lastDimensions && !force) return;
-
-        /*
-            When calculating
-        */
     }
 
     internal void CalculateWidths(Types.SizeAndPos dimensions, bool force = false)
@@ -104,7 +107,7 @@ public class Table : IDisposable
             we need to account for them.
         */
 
-        if (Headers.Count == 0)
+        if (_headers.Count == 0)
         {
 
         }
@@ -120,6 +123,27 @@ public class Table : IDisposable
 
     internal void GenerateActualRows()
     {
+        ActualRows.Clear();
+        for(int i = 0; i < _rows.Count; i++)
+        {
+            List<List<string>> items = [[]];
 
+            for(int j = 0; j < _rows[i].Length; j++)
+            {
+                if(j <= columnWidths[j])
+                    items[0].Add(_rows[i][j]);
+                else
+                {
+                    string str = _rows[i][j];
+                    while(str != string.Empty || items.Count == Global.MaxGridRowHeight)
+                    {
+                        if(items.Count + 1 == Global.MaxGridRowHeight)
+                        {
+                            
+                        }
+                    }
+                }
+            }
+        }
     }
 }

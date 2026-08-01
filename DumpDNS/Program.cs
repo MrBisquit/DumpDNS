@@ -252,6 +252,7 @@ namespace DumpDNS
                 Console.Write(Functionality.Version.VersionString);
             }
             Console.ResetColor();
+            Components.StatusBar.Render(new((LastW, LastH)));
         }
     }
 }

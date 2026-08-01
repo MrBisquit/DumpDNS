@@ -219,7 +219,7 @@ namespace DumpDNS
                 {
                     if (range.Family == family)
                     {
-                        if (Utils.IsIPInCIDR(ip, range.CIDR))
+                        if (Internal.Utils.IsIPInCIDR(ip, range.CIDR))
                         {
                             sources.Add(source.Value);
                             CIDRs.Add(range.CIDR);

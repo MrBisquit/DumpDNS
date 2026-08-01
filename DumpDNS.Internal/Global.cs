@@ -15,5 +15,6 @@ public static class Global
     public static bool VersionUnreleased = false;
 
     // Other information
-    public static int ConcurrentTasks = 5;
+    public static readonly int ConcurrentTasks = 5;
+    public static readonly int MaxGridRowHeight = 5;
 }

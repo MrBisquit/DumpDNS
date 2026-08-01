@@ -4,36 +4,40 @@ namespace DumpDNS.Internal;
 
 public interface ITask
 {
-    private static readonly Queue<ITask> Tasks = [];
-    private static readonly List<OngoingTask> Ongoing = [];
-    private static readonly List<FinishedTask> Finished = [];
+    private static readonly Queue<ITask> tasks = [];
+    private static readonly List<OngoingTask> ongoing = [];
+    private static readonly List<FinishedTask> finished = [];
+
+    public static Queue<ITask> Tasks { get { return tasks; } }
+    public static OngoingTask[] OnGoing { get { return [..ongoing]; } }
+    public static FinishedTask[] Finished { get { return [..finished]; } }
 
     public static async Task StartQueue()
     {
-        while (Tasks.Count != 0)
+        while (tasks.Count != 0)
         {
-            if (Ongoing.Count >= Global.ConcurrentTasks) continue;
+            if (ongoing.Count >= Global.ConcurrentTasks) continue;
 
-            var task = Tasks.Dequeue();
+            var task = tasks.Dequeue();
             if (task.WaitingFor.Count > 0)
-                Tasks.Enqueue(task);
+                tasks.Enqueue(task);
             else
-                Ongoing.Add(new(task));
+                ongoing.Add(new(task));
         }
     }
 
     public static void Enqueue(ITask task)
     {
-        Tasks.Enqueue(task);
+        tasks.Enqueue(task);
     }
 
     public static void Finish(OngoingTask finishedTask)
     {
         finishedTask.Finished = DateTime.Now;
-        Ongoing.Remove(finishedTask);
-        Finished.Add(new(finishedTask));
+        ongoing.Remove(finishedTask);
+        finished.Add(new(finishedTask));
 
-        foreach (var task in Tasks)
+        foreach (var task in tasks)
         {
             task.WaitingFor.Remove(finishedTask.ITask.TaskID);
         }
@@ -81,13 +85,13 @@ public class OngoingTask
         CancellationToken = CancellationTokenSource.Token;
         Progress = new Progress<double>();
         Started = DateTime.Now;
-        Task = Task.Factory.StartNew(_ => task.Action(this), this, CancellationToken);
+        Task = Task.Factory.StartNew(_ => { task.Action(this); ITask.Finish(this); }, this, CancellationToken);
     }
 }
 
 public class FinishedTask
 {
-    ITask ITask;
+    public ITask ITask;
 
     public DateTime Started;
 
