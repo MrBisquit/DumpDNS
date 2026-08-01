@@ -12,13 +12,14 @@ on:
       - 'v*'
 
 env:
-    DOTNET_VERSION: '8.0.x'
-    DOTNET_HUMAN: '8.0'
+    DOTNET_VERSION: '10.0.x'
+    DOTNET_HUMAN: '10.0'
 
 jobs:
     determine-version:
         name: Determine version
         runs-on: windows-latest
+        permissions: {}
         steps:
           - name: Determine version
             id: version
@@ -36,6 +37,8 @@ jobs:
         name: Windows Installer
         runs-on: windows-latest
         needs: [determine-version]
+        permissions:
+          contents: read
 
         steps:
           - name: Checkout
@@ -77,6 +80,8 @@ jobs:
         name: Build (${{ matrix.rid }})
         runs-on: ${{ matrix.os }}
         needs: [determine-version]
+        permissions:
+          contents: read
 
         strategy:
             fail-fast: false
@@ -149,20 +154,20 @@ jobs:
             run: |
                 Compress-Archive `
                     -Path Publish/framework/* `
-                    -DestinationPath DumpDNS-${{ matrix.rid }}.zip
+                    -DestinationPath DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}.zip
                 
                 Compress-Archive `
                     -Path Publish/self-contained/* `
-                    -DestinationPath DumpDNS-${{ matrix.rid }}-self-contained.zip
+                    -DestinationPath DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}-self-contained.zip
 
           - name: Archive (Unix)
             if: runner.os != 'Windows'
             shell: bash
             run: |
-                tar -czf DumpDNS-${{ matrix.rid }}.tar.gz \
+                tar -czf DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}.tar.gz \
                     -C Publish/framework .
                 
-                tar -czf DumpDNS-${{ matrix.rid }}-self-contained.tar.gz \
+                tar -czf DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}-self-contained.tar.gz \
                     -C Publish/self-contained .
 
             # Upload stuff
@@ -171,17 +176,17 @@ jobs:
             with:
                 name: DumpDNS-${{ matrix.rid }}
                 path: |
-                    DumpDNS-${{ matrix.rid }}.zip
-                    DumpDNS-${{ matrix.rid }}.tar.gz
+                    DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}.zip
+                    DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}.tar.gz
                 retention-days: 30
 
           - name: Upload self-contained
             uses: actions/upload-artifact@v4
             with:
-                name: DumpDNS-${{ matrix.rid }}-self-contained
+                name: DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}-self-contained
                 path: |
-                    DumpDNS-${{ matrix.rid }}-self-contained.zip
-                    DumpDNS-${{ matrix.rid }}-self-contained.tar.gz
+                    DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}-self-contained.zip
+                    DumpDNS-${{ needs.determine-version.outputs.version }}-${{ matrix.rid }}-self-contained.tar.gz
                 retention-days: 30
 
     create-release:
@@ -209,11 +214,24 @@ jobs:
                     | Platform | File | Notes |
                     |----------|------|-------|
                     | Windows | `DumpDNS-${{ needs.determine-version.outputs.version }}-setup.exe` | Run the installer, requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
+                    | Windows (x64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-x64.exe` |  |
+                    | Windows (x64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-x64-self-contained.zip` |  |
+                    | Windows (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-arm64.zip` |  |
+                    | Windows (arm64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-arm64-self-contained.zip` |  |
+                    | Linux (x64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-x64.tar.gz` |  |
+                    | Linux (x64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-x64-self-contained.tar.gz` |  |
+                    | Linux (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-arm64.tar.gz` |  |
+                    | Linux (arm64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-arm64-self-contained.tar.gz` |  |
+                    | OSX (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-osx-arm64.tar.gz` |  |
+                    | OSX (arm64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-osx-arm64-self-contained.tar.gz` |  |
 
                     ### Prerequisites
 
-                    - [.NET ${{ env.DOTNET_HUMAN }} SDK](https://dot.net/download)
+                    - [.NET ${{ env.DOTNET_HUMAN }} Runtime](https://dot.net/download)
+                      - If you install a version with "self-contained" in the name, you do not need this.
+                generate_release_notes: true
                 draft: false
                 prerelease: false
+                
                 files: |
                     installers/**/*
