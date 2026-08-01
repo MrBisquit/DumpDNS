@@ -19,6 +19,7 @@ jobs:
     determine-version:
         name: Determine version
         runs-on: windows-latest
+        permissions: {}
         steps:
           - name: Determine version
             id: version
