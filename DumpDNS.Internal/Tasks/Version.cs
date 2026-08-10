@@ -14,7 +14,7 @@ public class Version : ITask
 
     public HashSet<Guid> WaitingFor { get; set; } = [];
 
-    public Action<OngoingTask> Action { get; } = async task =>
+    public Action<OngoingTask> Action { get; } = task =>
     {
         Global.Version = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
         List<string> split = [.. Global.Version.Split('.')];
@@ -22,7 +22,9 @@ public class Version : ITask
         Global.Version = string.Join('.', split);
 
         GitHubClient client = new(new ProductHeaderValue("DumpDNS"));
-        var release = await client.Repository.Release.GetLatest("MrBisquit", "DumpDNS");
+        var releaseTask = client.Repository.Release.GetLatest("MrBisquit", "DumpDNS");
+        releaseTask.Wait();
+        var release = releaseTask.Result;
 
         if (Utils.IsHigher(Global.Version, release.TagName))
         {

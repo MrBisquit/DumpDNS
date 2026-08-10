@@ -14,15 +14,48 @@ public interface ITask
 
     public static async Task StartQueue()
     {
-        while (tasks.Count != 0)
+        while (tasks.Count != 0 || ongoing.Count != 0)
         {
+            while(ongoing.Count < Global.ConcurrentTasks)
+            {
+                ITask? next = null;
+
+                foreach(var task in tasks)
+                {
+                    if(task.WaitingFor.Count == 0)
+                    {
+                        next = task;
+                        break;
+                    } else
+                    {
+                        tasks.Enqueue(tasks.Dequeue());
+                    }
+                }
+
+                if(next != null)
+                {
+                    tasks.Dequeue();
+                    ongoing.Add(new(next));
+                    continue;
+                }
+
+                break;
+            }
+
             if (ongoing.Count >= Global.ConcurrentTasks) continue;
 
-            var task = tasks.Dequeue();
-            if (task.WaitingFor.Count > 0)
-                tasks.Enqueue(task);
-            else
-                ongoing.Add(new(task));
+            if(ongoing.Count > 0)
+            {
+                await Task.WhenAny(ongoing.Select(x => x.Task));
+            } else
+            {
+                // Tasks do exist, but none of them can be run
+                //
+                // - Try to requeue everything, then try until it has
+                //   either made a full loop, or the issue is resolved
+                // - Maybe try to determine if all the tasks depend on
+                //   one another
+            }
         }
     }
 
@@ -85,7 +118,7 @@ public class OngoingTask
         CancellationToken = CancellationTokenSource.Token;
         Progress = new Progress<double>();
         Started = DateTime.Now;
-        Task = Task.Factory.StartNew(_ => { task.Action(this); ITask.Finish(this); }, this, CancellationToken);
+        Task = Task.Factory.StartNew(_ => { try { task.Action(this); } finally { ITask.Finish(this); } }, this, CancellationToken);
     }
 }
 
