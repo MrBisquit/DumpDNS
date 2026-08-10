@@ -11,7 +11,7 @@ public static class RenderList
 
     public static void Render(Types.SizeAndPos pos)
     {
-        while(queue.Count > 0)
+        while (queue.Count > 0)
             queue.Dequeue()(pos);
     }
 }

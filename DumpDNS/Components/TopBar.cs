@@ -15,11 +15,11 @@ public static class TopBar
         Console.SetCursorPosition((dimensions.Width / 2) - (text.Length / 2), 0);
         Console.Write(text);
 
-        if(Global.VersionString.Length > 0)
+        if (Global.VersionString.Length > 0)
         {
             Console.SetCursorPosition(dimensions.Width - Global.VersionString.Length, 0);
-            if(Global.VersionUnreleased) Console.BackgroundColor = ConsoleColor.Magenta;
-            if(Global.VersionAvailable) Console.BackgroundColor = ConsoleColor.Green;
+            if (Global.VersionUnreleased) Console.BackgroundColor = ConsoleColor.Magenta;
+            if (Global.VersionAvailable) Console.BackgroundColor = ConsoleColor.Green;
             else Console.BackgroundColor = ConsoleColor.DarkBlue;
             Console.Write(Global.VersionString);
         }

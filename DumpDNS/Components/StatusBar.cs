@@ -8,14 +8,15 @@ public static class StatusBar
     {
         (int, int) pos = Console.GetCursorPosition();
         Console.SetCursorPosition(0, dimensions.Height - (BottomBar.Visible ? 2 : 1));
-        if(Internal.ITask.OnGoing.Length == 0)
+        if (Internal.ITask.OnGoing.Length == 0)
         {
             // Draw an empty bar
             Console.BackgroundColor = ConsoleColor.Blue;
             string text = $"No tasks to be completed ({Internal.ITask.OnGoing.Length} ongoing, and {Internal.ITask.Finished.Length} finished)";
             Console.Write($"{text}{new string(' ', dimensions.Width - text.Length)}");
             Console.ResetColor();
-        } else
+        }
+        else
         {
             Console.BackgroundColor = ConsoleColor.Green;
             string text = "Tasks running";
@@ -29,12 +30,12 @@ public static class StatusBar
 
     public static void CheckRender()
     {
-        if((DateTime.Now - last).TotalMilliseconds >= 100)
-                RenderList.Add(Render);
+        if ((DateTime.Now - last).TotalMilliseconds >= 100)
+            RenderList.Add(Render);
 
-        if(Internal.ITask.OnGoing.Length > 0)
+        if (Internal.ITask.OnGoing.Length > 0)
         {
-            if((DateTime.Now - last).TotalMilliseconds >= 100)
+            if ((DateTime.Now - last).TotalMilliseconds >= 100)
                 RenderList.Add(Render);
             last = DateTime.Now;
         }

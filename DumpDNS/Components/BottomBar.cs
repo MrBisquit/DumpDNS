@@ -13,13 +13,14 @@ public static class BottomBar
     {
         (int, int) pos = Console.GetCursorPosition();
         Console.SetCursorPosition(dimensions.X, dimensions.Y);
-        if(Internal.ITask.OnGoing.Length == 0)
+        if (Internal.ITask.OnGoing.Length == 0)
         {
             // Draw an empty bar
-            
-        } else
+
+        }
+        else
         {
-            
+
         }
         Console.SetCursorPosition(pos.Item1, pos.Item2);
     }

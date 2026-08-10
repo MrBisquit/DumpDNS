@@ -46,13 +46,13 @@ public class TXT : IRecord<TxtRecord>
     public static string JoinTXTValues(string[] values)
     {
         string str = "";
-        for(int i = 0; i < values.Length; i++)
+        for (int i = 0; i < values.Length; i++)
             str += $"\"{values[i]}\"{(i <= values.Length ? ";" : "")}";
         return str;
     }
 
     public static string JoinTXTValues(ICollection<string> values)
     {
-        return JoinTXTValues([..values]);
+        return JoinTXTValues([.. values]);
     }
 }

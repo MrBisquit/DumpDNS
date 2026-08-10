@@ -9,8 +9,8 @@ public interface ITask
     private static readonly List<FinishedTask> finished = [];
 
     public static Queue<ITask> Tasks { get { return tasks; } }
-    public static OngoingTask[] OnGoing { get { return [..ongoing]; } }
-    public static FinishedTask[] Finished { get { return [..finished]; } }
+    public static OngoingTask[] OnGoing { get { return [.. ongoing]; } }
+    public static FinishedTask[] Finished { get { return [.. finished]; } }
 
     public static async Task StartQueue()
     {

@@ -124,22 +124,22 @@ public class Table : IDisposable
     internal void GenerateActualRows()
     {
         ActualRows.Clear();
-        for(int i = 0; i < _rows.Count; i++)
+        for (int i = 0; i < _rows.Count; i++)
         {
             List<List<string>> items = [[]];
 
-            for(int j = 0; j < _rows[i].Length; j++)
+            for (int j = 0; j < _rows[i].Length; j++)
             {
-                if(j <= columnWidths[j])
+                if (j <= columnWidths[j])
                     items[0].Add(_rows[i][j]);
                 else
                 {
                     string str = _rows[i][j];
-                    while(str != string.Empty || items.Count == Global.MaxGridRowHeight)
+                    while (str != string.Empty || items.Count == Global.MaxGridRowHeight)
                     {
-                        if(items.Count + 1 == Global.MaxGridRowHeight)
+                        if (items.Count + 1 == Global.MaxGridRowHeight)
                         {
-                            
+
                         }
                     }
                 }
