@@ -39,6 +39,14 @@ namespace DumpDNS.CLI
             { Format.Fancy,             "Fancy output with colours" }
         };
 
+        public enum DumpFormat
+        {
+            DumpDNS,
+            JSON,
+            ScriptFriendly,
+            Fancy
+        }
+
         public enum Depth
         {
             Minimal,
@@ -127,6 +135,12 @@ namespace DumpDNS.CLI
                 DefaultValueFactory = _ => { return Format.None; }
             };
 
+            Option<Format> dumpFormat = new("--dump-format", "-df", "/dump-format", "/df")
+            {
+                Description = "Specifies the dump format (only useful if used with the dump option)",
+                DefaultValueFactory = _ => { return Format.None; }
+            };
+
             Option<Depth> depth = new("--depth", "-dt", "/depth", "/dt")
             {
                 Description = "The depth of the information returned, the deeper the information, " +
@@ -144,7 +158,8 @@ namespace DumpDNS.CLI
                 records,
                 stats,
                 colour,
-                //format,
+                format,
+                dumpFormat,
                 depth
             };
             rootCommand.SetAction((result) =>

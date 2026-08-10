@@ -116,7 +116,7 @@ namespace DumpDNS.Functionality
                 }
                 else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
                 {
-                    Program.EnableSearchBar(); // Ctrl+F
+                    //Program.EnableSearchBar(); // Ctrl+F
                 }
                 else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
                 {
@@ -162,7 +162,7 @@ namespace DumpDNS.Functionality
                 }
                 else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
                 {
-                    Program.EnableSearchBar(); // Ctrl+F
+                    //Program.EnableSearchBar(); // Ctrl+F
                 }
                 else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
                 {
@@ -215,7 +215,7 @@ namespace DumpDNS.Functionality
                 }
                 else if (key.Key == ConsoleKey.F && key.Modifiers == ConsoleModifiers.Control)
                 {
-                    Program.EnableSearchBar(); // Ctrl+F
+                    //Program.EnableSearchBar(); // Ctrl+F
                 }
                 else if (key.Key == ConsoleKey.D && key.Modifiers == ConsoleModifiers.Control)
                 {

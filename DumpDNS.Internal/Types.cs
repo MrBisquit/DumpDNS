@@ -88,7 +88,12 @@ public static class Types
         Domain,
         TTL,
         ITTL,
-        Bytes
+        Bytes,
+        Port,
+        Priority,
+        CertificateAssociation,
+        CertificateUsage,
+        TextValues
     }
 
     public class TableDataRow(string content, TableDataRowType type)

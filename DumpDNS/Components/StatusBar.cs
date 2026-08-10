@@ -12,13 +12,31 @@ public static class StatusBar
         {
             // Draw an empty bar
             Console.BackgroundColor = ConsoleColor.Blue;
-            string text = "No tasks to be completed";
+            string text = $"No tasks to be completed ({Internal.ITask.OnGoing.Length} ongoing, and {Internal.ITask.Finished.Length} finished)";
             Console.Write($"{text}{new string(' ', dimensions.Width - text.Length)}");
             Console.ResetColor();
         } else
         {
-            
+            Console.BackgroundColor = ConsoleColor.Green;
+            string text = "Tasks running";
+            Console.Write($"{text}{new string(' ', dimensions.Width - text.Length)}");
+            Console.ResetColor();
         }
         Console.SetCursorPosition(pos.Item1, pos.Item2);
+    }
+
+    static DateTime last = DateTime.Now;
+
+    public static void CheckRender()
+    {
+        if((DateTime.Now - last).TotalMilliseconds >= 100)
+                RenderList.Add(Render);
+
+        if(Internal.ITask.OnGoing.Length > 0)
+        {
+            if((DateTime.Now - last).TotalMilliseconds >= 100)
+                RenderList.Add(Render);
+            last = DateTime.Now;
+        }
     }
 }

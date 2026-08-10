@@ -15,9 +15,11 @@ namespace DumpDNS
                 return CLI.CLI.Run(args);
             }
 
-            Console.Title = "DumpDNS";
+            return CLI.CLI.Run(["-?"]);
+
+            /*Console.Title = "DumpDNS";
+            Console.CursorVisible = false;
             Console.Clear();
-            Console.WriteLine("Working...");
             SizeChanged += static (sender, dimensions) =>
             {
                 Console.ResetColor();
@@ -25,24 +27,32 @@ namespace DumpDNS
                 LastW = dimensions.Item1;
                 LastH = dimensions.Item2;
                 Render?.Invoke(sender, dimensions); // Call render if it is defined
+                RenderList.Add(Components.TopBar.Render);
+                RenderList.Add(Components.StatusBar.Render);
+                RenderList.Add(Components.BottomBar.Render);
             };
 
-            ResizeTask = Task.Factory.StartNew(() =>
+            ResizeTask = Task.Factory.StartNew(async () =>
             {
                 while (true)
                 {
+                    Components.StatusBar.CheckRender();
+                    await Internal.ITask.StartQueue();
+                    RenderList.Render(new((LastW, LastH)));
                     if (Console.BufferWidth != LastW || Console.BufferHeight != LastH)
                     {
                         SizeChanged(null, (Console.BufferWidth, Console.BufferHeight));
                     }
-                    Thread.Sleep(100); // Wait, so that it doesn't freeze
+                    //Thread.Sleep(100); // Wait, so that it doesn't freeze
+                    await Task.Delay(100);
                 }
             });
 
-            Render += static (sender, dimensions) =>
+            Render += static async (sender, dimensions) =>
             {
                 RenderTop();
                 RenderBottom(ActiveInstructions);
+                RenderList.Render(new(dimensions));
             };
 
             UpdateBottom += static (object? sender, EventArgs e) =>
@@ -55,6 +65,10 @@ namespace DumpDNS
             Functionality.Version.StartCheck();
 
             Internal.ITask.Enqueue(new Internal.Tasks.Version());
+            
+            RenderList.Add(Components.TopBar.Render);
+            RenderList.Add(Components.StatusBar.Render);
+            RenderList.Add(Components.BottomBar.Render);
 
             while (true)
             {
@@ -62,6 +76,7 @@ namespace DumpDNS
                 CanDump = false;
                 Domain = null;
                 Console.Clear();
+
                 Internal.ITask.StartQueue();
 
                 // First stage, select a domain
@@ -82,7 +97,7 @@ namespace DumpDNS
                 bool exit = !Functionality.Results.Start(dump, (LastW, LastH));
 
                 if (exit) return 0;
-            }
+            }*/
         }
 
         /// <summary>
@@ -141,53 +156,9 @@ namespace DumpDNS
             [BottomInstructions.Search] = "Escape: Back"
         };
 
-        public class SearchBar
-        {
-            public static char[] AllowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.=_:; ".ToCharArray();
-
-            public StringBuilder Term;
-            public int Cursor;
-
-            public Functionality.Search Search;
-            public Functionality.SearchResults Results;
-
-            public SearchBar()
-            {
-                Term = new StringBuilder();
-                Cursor = 0;
-
-                Search = new Functionality.Search();
-                Results = new Functionality.SearchResults();
-            }
-
-            public bool StartCycle()
-            {
-                Program.Render += Render;
-                while (true)
-                {
-                    Thread.Sleep(10);
-                    return false; // Temporary
-                }
-            }
-
-            public void Render(object? sender, (int, int) dimensions)
-            {
-
-            }
-        }
-
-        public static SearchBar searchBar;
         public static bool IsSearchBar = false; // Whether or not to display the search bar
         public static bool CanSearch = false;
         public static bool CanDump = false;
-
-        public static bool EnableSearchBar()
-        {
-            searchBar = new SearchBar();
-            IsSearchBar = true;
-
-            return searchBar.StartCycle();
-        }
 
         /// <summary>
         /// Starts the dump file process
@@ -202,7 +173,7 @@ namespace DumpDNS
         /// </summary>
         static void RenderTop()
         {
-            if (IsSearchBar && searchBar != null) return; // Handled elsewhere
+            if (IsSearchBar) return; // Handled elsewhere
 
             /*Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -215,8 +186,6 @@ namespace DumpDNS
             }
             Console.Write(text + new string(' ', LastW - text.Length));
             Console.ResetColor();*/
-
-            Components.TopBar.Render(new((LastW, LastH)));
         }
 
         /// <summary>
@@ -226,7 +195,7 @@ namespace DumpDNS
         /// <see cref="BottomInstructionsDictionary"/>
         static void RenderBottom(BottomInstructions instructions)
         {
-            Console.CursorTop = LastH - 1;
+            /*Console.CursorTop = LastH - 1;
             Console.CursorLeft = 0;
             Console.BackgroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Black;
@@ -256,8 +225,7 @@ namespace DumpDNS
                 }
                 Console.Write(Functionality.Version.VersionString);
             }
-            Console.ResetColor();
-            Components.StatusBar.Render(new((LastW, LastH)));
+            Console.ResetColor();*/
         }
     }
 }

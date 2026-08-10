@@ -16,6 +16,8 @@ public class Version : ITask
 
     public Action<OngoingTask> Action { get; } = async task =>
     {
+        await Task.Delay(1000);
+
         Global.Version = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
         List<string> split = Global.Version.Split('.').ToList();
         split.RemoveAt(split.Count - 1);
