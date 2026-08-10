@@ -47,7 +47,7 @@ public class TXT : IRecord<TxtRecord>
     {
         string str = "";
         for (int i = 0; i < values.Length; i++)
-            str += $"\"{values[i]}\"{(i <= values.Length ? ";" : "")}";
+            str += $"\"{values[i]}\"{(i < values.Length - 1 ? ";" : "")}";
         return str;
     }
 
