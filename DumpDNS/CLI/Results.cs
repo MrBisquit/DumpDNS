@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DumpDNS.Internal;
 
 namespace DumpDNS.CLI
 {
@@ -11,21 +12,21 @@ namespace DumpDNS.CLI
     {
         public static void DisplayResultTotals(List<Types.DnsRecordType> records, bool colour, CLI.Depth depth)
         {
-            Console.WriteLine("Results returned:");
+            /*Console.WriteLine("Results returned:");
             foreach (var record in records)
             {
                 Console.Write($"\t{record}:\t");
                 if (colour) Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine($"{Types.IRecords[record].Rows.Count}");
                 if (colour) Console.ResetColor();
-            }
+            }*/
         }
 
         public static int ResultsPadding = 15;
 
         public static void DisplayResults(List<Types.DnsRecordType> records, bool colour, CLI.Depth depth)
         {
-            foreach (var item in records)
+            /*foreach (var item in records)
             {
                 var record = Types.IRecords[item];
 
@@ -49,7 +50,7 @@ namespace DumpDNS.CLI
                     else
                         record.Results(depth, colour, i);
                 }
-            }
+            }*/
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using DumpDNS.Functionality;
+using DumpDNS.Internal;
 
 namespace DumpDNS.CLI
 {
@@ -12,7 +12,9 @@ namespace DumpDNS.CLI
     {
         public static int StartDump(string domain, IPAddress? dns, int port, List<Types.DnsRecordType>? records, bool statistics, bool colour, CLI.Format format, string? dump, CLI.Depth depth)
         {
-            records ??= [.. Types.RecordTypes];
+            // TODO
+            
+            /*records ??= [.. Types.RecordTypes];
             records.Sort();
 
             if (dns != null)
@@ -50,7 +52,9 @@ namespace DumpDNS.CLI
                 Results.DisplayResults(records, colour, depth);
             }
 
-            return 0;
+            return 0;*/
+
+            return 1;
         }
     }
 }

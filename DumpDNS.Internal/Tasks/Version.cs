@@ -16,10 +16,8 @@ public class Version : ITask
 
     public Action<OngoingTask> Action { get; } = async task =>
     {
-        await Task.Delay(1000);
-
         Global.Version = Assembly.GetExecutingAssembly().GetName().Version!.ToString();
-        List<string> split = Global.Version.Split('.').ToList();
+        List<string> split = [..Global.Version.Split('.')];
         split.RemoveAt(split.Count - 1);
         Global.Version = string.Join('.', split);
 
@@ -40,5 +38,7 @@ public class Version : ITask
         {
             Global.VersionString = Global.Version;
         }
+
+        Console.WriteLine("Found, and updated version information");
     };
 }

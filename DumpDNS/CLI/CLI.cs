@@ -7,8 +7,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using DnsClient;
-using DumpDNS.Functionality;
-using DumpDNS.Functionality.Records;
+using DumpDNS.Internal;
+using DumpDNS.Internal.Records;
 
 namespace DumpDNS.CLI
 {
@@ -193,18 +193,6 @@ namespace DumpDNS.CLI
                     rootCommand.Options[i].Action = new Version();
 
             return rootCommand.Parse(args).Invoke();
-
-            /*ParseResult parseResult = rootCommand.Parse(args);
-            if(parseResult.Errors.Count == 0)
-            {
-                return 0;
-            }
-            if(version.va)
-            foreach (ParseError parseError in parseResult.Errors)
-            {
-                Console.Error.WriteLine(parseError.Message);
-            }
-            return 1;*/
         }
     }
 }
