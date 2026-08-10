@@ -169,7 +169,7 @@ namespace DumpDNS.CLI
                     var parsedFormat = result.GetValue(format);
                     var parsedDepth = result.GetValue(depth);
 
-                    if(!Utils.CheckValidDomain(parsedDomain))
+                    if (!Utils.CheckValidDomain(parsedDomain))
                     {
                         Console.WriteLine("Invalid domain");
                         Environment.Exit(1);
