@@ -16,23 +16,24 @@ public interface ITask
     {
         while (tasks.Count != 0 || ongoing.Count != 0)
         {
-            while(ongoing.Count < Global.ConcurrentTasks)
+            while (ongoing.Count < Global.ConcurrentTasks)
             {
                 ITask? next = null;
 
-                foreach(var task in tasks)
+                foreach (var task in tasks)
                 {
-                    if(task.WaitingFor.Count == 0)
+                    if (task.WaitingFor.Count == 0)
                     {
                         next = task;
                         break;
-                    } else
+                    }
+                    else
                     {
                         tasks.Enqueue(tasks.Dequeue());
                     }
                 }
 
-                if(next != null)
+                if (next != null)
                 {
                     tasks.Dequeue();
                     ongoing.Add(new(next));
@@ -44,10 +45,11 @@ public interface ITask
 
             if (ongoing.Count >= Global.ConcurrentTasks) continue;
 
-            if(ongoing.Count > 0)
+            if (ongoing.Count > 0)
             {
                 await Task.WhenAny(ongoing.Select(x => x.Task));
-            } else
+            }
+            else
             {
                 // Tasks do exist, but none of them can be run
                 //
