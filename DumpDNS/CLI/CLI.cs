@@ -171,11 +171,11 @@ namespace DumpDNS.CLI
 
                     if (!Utils.CheckValidDomain(parsedDomain))
                     {
-                        Console.WriteLine("Invalid domain");
+                        Display.DisplayError($"\"{parsedDomain}\" is not a valid domain.", true);
                         Environment.Exit(1);
                     }
 
-                    if (dump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
+                    if (parsedDump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
 
                     return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, true, parsedFormat, parsedDump, parsedDepth);
                 }
