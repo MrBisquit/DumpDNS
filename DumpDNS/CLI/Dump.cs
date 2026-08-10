@@ -13,7 +13,7 @@ namespace DumpDNS.CLI
         public static int StartDump(string domain, IPAddress? dns, int port, List<Types.DnsRecordType>? records, bool statistics, bool colour, CLI.Format format, string? dump, CLI.Depth depth)
         {
             // TODO
-            
+
             /*records ??= [.. Types.RecordTypes];
             records.Sort();
 
