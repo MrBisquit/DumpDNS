@@ -122,12 +122,6 @@ namespace DumpDNS.CLI
                 DefaultValueFactory = _ => { return false; }
             };
 
-            Option<bool> colour = new("--colour", "--color", "-c", "/colour", "/color", "/c")
-            {
-                Description = "Uses colour to highlight useful information.",
-                DefaultValueFactory = _ => { return false; }
-            };
-
             Option<Format> format = new("--format", "-f", "/format", "/f")
             {
                 Description = "Specifies the output format, options:\n" +
@@ -157,7 +151,6 @@ namespace DumpDNS.CLI
                 dnsPort,
                 records,
                 stats,
-                colour,
                 format,
                 dumpFormat,
                 depth
@@ -173,13 +166,18 @@ namespace DumpDNS.CLI
                     var parsedDNSPort = result.GetValue(dnsPort);
                     var parsedRecords = result.GetValue(records);
                     var parsedStats = result.GetValue(stats);
-                    var parsedColour = result.GetValue(colour);
                     var parsedFormat = result.GetValue(format);
                     var parsedDepth = result.GetValue(depth);
 
+                    if(!Utils.CheckValidDomain(parsedDomain))
+                    {
+                        Console.WriteLine("Invalid domain");
+                        Environment.Exit(1);
+                    }
+
                     if (dump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
 
-                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, parsedColour, parsedFormat, parsedDump, parsedDepth);
+                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, true, parsedFormat, parsedDump, parsedDepth);
                 }
 
                 foreach (var error in result.Errors)

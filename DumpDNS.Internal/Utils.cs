@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace DumpDNS.Internal;
 
@@ -74,5 +75,15 @@ public static class Utils
         }
 
         return true;
+    }
+
+    private static readonly Regex DomainRegex = new(
+        @"^(?=.{1,253}$)(?!-)([A-Za-z0-9-]{1,63}(?<!-)\.)+[A-Za-z]{2,63}$",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase
+    );
+
+    public static bool CheckValidDomain(string domain)
+    {
+        return !string.IsNullOrWhiteSpace(domain) && DomainRegex.IsMatch(domain.Trim());
     }
 }
