@@ -1,11 +1,30 @@
 using System;
 using DnsClient;
+using DnsClient.Protocol;
 using DumpDNS.Internal.Records;
 
 namespace DumpDNS.Internal.Tasks;
 
-public class Record<T> : ITask
+public class Record
 {
+    
+}
+
+public class Record<T> : Record, ITask
+{
+    public Record(Types.LookupInfo lookup, LookupClient client, Types.DnsRecordType type)
+    {
+        TaskName = $"Fetching {typeof(T)} records";
+        Lookup = lookup;
+        Client = client;
+        var result = IRecord.Create(type);
+        if(result == null)
+        {
+            throw new Exception($"IRecord.Create({type}) returned {result}");
+        }
+        IRecord = result;
+    }
+
     public Record(Types.LookupInfo lookup, LookupClient client, ref IRecord<T> record)
     {
         TaskName = $"Fetching {typeof(T)} records";
@@ -22,7 +41,7 @@ public class Record<T> : ITask
 
     public Types.LookupInfo Lookup;
     public LookupClient Client;
-    public IRecord<T> IRecord;
+    public IRecord IRecord;
 
     public Action<OngoingTask> Action { get; } = async task =>
     {

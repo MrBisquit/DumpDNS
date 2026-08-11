@@ -13,6 +13,7 @@ public class A : IRecord<ARecord>
 
     public void FetchData(LookupClient client, Types.LookupInfo info)
     {
+        Console.WriteLine("Fetching A records");
         FetchDataAsync(client, info).Wait();
     }
 
