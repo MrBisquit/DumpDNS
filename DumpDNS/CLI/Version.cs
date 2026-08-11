@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
@@ -6,6 +6,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DumpDNS.Internal;
 
 namespace DumpDNS.CLI
 {
@@ -20,16 +21,18 @@ namespace DumpDNS.CLI
             Console.WriteLine($".NET Runtime Version:\t{runtimeVersion}");
             Console.Write($"DumpDNS Version:\t...");
 
-            Functionality.Version.StartCheck().Wait();
-            Console.WriteLine($"\rDumpDNS Version:\t{Functionality.Version.VersionString}");
-            if (Functionality.Version.IsNewVersionAvailable)
+            ITask.Enqueue(new Internal.Tasks.Version());
+            ITask.StartQueue().Wait();
+
+            Console.WriteLine($"\rDumpDNS Version:\t{Global.Version}");
+            if (Global.VersionAvailable)
             {
-                Console.Write($"\nThere is a new version available ({Functionality.Version.VersionString}), " +
+                Console.Write($"\nThere is a new version available ({Global.VersionString}), " +
                     "see https://github.com/MrBisquit/DumpDNS/releases/latest/ to download it.");
             }
             else
             {
-                Console.WriteLine($"\nUp to date! (Current: {Functionality.Version.CurrentVersion} Available: {Functionality.Version.VersionString})");
+                Console.WriteLine($"\nUp to date! (Current: {Global.Version} Available: {Global.VersionString})");
             }
 
             return 0;

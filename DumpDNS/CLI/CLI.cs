@@ -1,6 +1,3 @@
-﻿using DnsClient;
-using DumpDNS.Functionality;
-using DumpDNS.Functionality.Records;
 using System;
 using System.Collections.Generic;
 using System.CommandLine;
@@ -9,6 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DnsClient;
+using DumpDNS.Internal;
+using DumpDNS.Internal.Records;
 
 namespace DumpDNS.CLI
 {
@@ -39,6 +39,14 @@ namespace DumpDNS.CLI
             { Format.Fancy,             "Fancy output with colours" }
         };
 
+        public enum DumpFormat
+        {
+            DumpDNS,
+            JSON,
+            ScriptFriendly,
+            Fancy
+        }
+
         public enum Depth
         {
             Minimal,
@@ -65,6 +73,13 @@ namespace DumpDNS.CLI
             Argument<string> domain = new("Domain")
             {
                 Description = "The domain to query."
+            };
+
+            Argument<string> action = new("Action")
+            {
+                Description = "The action to take",
+                Arity = ArgumentArity.ZeroOrOne,
+                DefaultValueFactory = _ => { return "dump"; }
             };
 
             Option<string> dump = new("--dump", "-d", "/dump", "/d")
@@ -107,16 +122,16 @@ namespace DumpDNS.CLI
                 DefaultValueFactory = _ => { return false; }
             };
 
-            Option<bool> colour = new("--colour", "--color", "-c", "/colour", "/color", "/c")
-            {
-                Description = "Uses colour to highlight useful information.",
-                DefaultValueFactory = _ => { return false; }
-            };
-
             Option<Format> format = new("--format", "-f", "/format", "/f")
             {
                 Description = "Specifies the output format, options:\n" +
                 $"{FormatOptionsAsString()}",
+                DefaultValueFactory = _ => { return Format.None; }
+            };
+
+            Option<Format> dumpFormat = new("--dump-format", "-df", "/dump-format", "/df")
+            {
+                Description = "Specifies the dump format (only useful if used with the dump option)",
                 DefaultValueFactory = _ => { return Format.None; }
             };
 
@@ -130,13 +145,14 @@ namespace DumpDNS.CLI
             RootCommand rootCommand = new("DumpDNS")
             {
                 domain,
+                action,
                 dump,
                 dns,
                 dnsPort,
                 records,
                 stats,
-                colour,
-                //format,
+                format,
+                dumpFormat,
                 depth
             };
             rootCommand.SetAction((result) =>
@@ -150,13 +166,18 @@ namespace DumpDNS.CLI
                     var parsedDNSPort = result.GetValue(dnsPort);
                     var parsedRecords = result.GetValue(records);
                     var parsedStats = result.GetValue(stats);
-                    var parsedColour = result.GetValue(colour);
                     var parsedFormat = result.GetValue(format);
                     var parsedDepth = result.GetValue(depth);
 
-                    if (dump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
+                    if (!Utils.CheckValidDomain(parsedDomain))
+                    {
+                        Display.DisplayError($"\"{parsedDomain}\" is not a valid domain.", true);
+                        Environment.Exit(1);
+                    }
 
-                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, parsedColour, parsedFormat, parsedDump, parsedDepth);
+                    if (parsedDump == null) Console.WriteLine($"DumpDNS Looking up \"{parsedDomain}\" on {(parsedDNS == null ? "default" : parsedDNS)}:{parsedDNSPort}");
+
+                    return Dump.StartDump(parsedDomain, parsedDNS, parsedDNSPort, parsedRecords, parsedStats, true, parsedFormat, parsedDump, parsedDepth);
                 }
 
                 foreach (var error in result.Errors)
@@ -170,18 +191,6 @@ namespace DumpDNS.CLI
                     rootCommand.Options[i].Action = new Version();
 
             return rootCommand.Parse(args).Invoke();
-
-            /*ParseResult parseResult = rootCommand.Parse(args);
-            if(parseResult.Errors.Count == 0)
-            {
-                return 0;
-            }
-            if(version.va)
-            foreach (ParseError parseError in parseResult.Errors)
-            {
-                Console.Error.WriteLine(parseError.Message);
-            }
-            return 1;*/
         }
     }
 }
