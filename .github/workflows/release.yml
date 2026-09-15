@@ -203,7 +203,7 @@ jobs:
                 path: installers
                 merge-multiple: false
           - name: Create Release
-            uses: softprops/action-gh-release@v2
+            uses: softprops/action-gh-release@v3
             with:
                 name: "DumpDNS ${{ needs.determine-version.outputs.version }}"
                 body: |
