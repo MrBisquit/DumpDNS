@@ -47,7 +47,7 @@ jobs:
                 fetch-depth: 0
                 submodules: recursive # Not required, but just in case
           - name: Setup .NET
-            uses: actions/setup-dotnet@v4
+            uses: actions/setup-dotnet@v6
             with:
                 dotnet-version: ${{ env.DOTNET_VERSION }}
           - name: Restore
@@ -112,7 +112,7 @@ jobs:
                 fetch-depth: 0
                 submodules: recursive # Not required, but just in case
           - name: Setup .NET
-            uses: actions/setup-dotnet@v4
+            uses: actions/setup-dotnet@v6
             with:
                 dotnet-version: ${{ env.DOTNET_VERSION }}
           - name: Restore
