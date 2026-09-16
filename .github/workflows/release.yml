@@ -214,15 +214,15 @@ jobs:
                     | Platform | File | Notes |
                     |----------|------|-------|
                     | Windows | `DumpDNS-${{ needs.determine-version.outputs.version }}-setup.exe` | Run the installer, requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
-                    | Windows (x64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-x64.exe` | .NET ${{ env.DOTNET_HUMAN }} Runtime |
+                    | Windows (x64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-x64.exe` | Requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
                     | Windows (x64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-x64-self-contained.zip` |  |
-                    | Windows (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-arm64.zip` | .NET ${{ env.DOTNET_HUMAN }} Runtime |
+                    | Windows (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-arm64.zip` | Requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
                     | Windows (arm64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-win-arm64-self-contained.zip` |  |
-                    | Linux (x64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-x64.tar.gz` | .NET ${{ env.DOTNET_HUMAN }} Runtime |
+                    | Linux (x64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-x64.tar.gz` | Requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
                     | Linux (x64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-x64-self-contained.tar.gz` |  |
-                    | Linux (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-arm64.tar.gz` | .NET ${{ env.DOTNET_HUMAN }} Runtime |
+                    | Linux (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-arm64.tar.gz` | Requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
                     | Linux (arm64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-linux-arm64-self-contained.tar.gz` |  |
-                    | OSX (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-osx-arm64.tar.gz` | .NET ${{ env.DOTNET_HUMAN }} Runtime |
+                    | OSX (arm64) | `DumpDNS-${{ needs.determine-version.outputs.version }}-osx-arm64.tar.gz` | Requires the .NET ${{ env.DOTNET_HUMAN }} Runtime |
                     | OSX (arm64 self-contained) | `DumpDNS-${{ needs.determine-version.outputs.version }}-osx-arm64-self-contained.tar.gz` |  |
 
                     ### Prerequisites
