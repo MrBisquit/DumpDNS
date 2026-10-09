@@ -1,10 +1,12 @@
-﻿using DumpDNS.Functionality;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DnsClient;
+using DumpDNS.Internal;
+using DumpDNS.Internal.Records;
 
 namespace DumpDNS.CLI
 {
@@ -12,7 +14,28 @@ namespace DumpDNS.CLI
     {
         public static int StartDump(string domain, IPAddress? dns, int port, List<Types.DnsRecordType>? records, bool statistics, bool colour, CLI.Format format, string? dump, CLI.Depth depth)
         {
+            // TODO
             records ??= [.. Types.RecordTypes];
+            records.Sort();
+
+            LookupClient client = dns == null ? new() : new(dns, port);
+
+            for(int i = 0; i < records.Count; i++)
+            {
+                var type = Types.DNSRecordTasks[records[i]];
+                var task = Activator.CreateInstance(type) as IRecord;
+                if(task == null)
+                {
+                    Display.DisplayError($"Failed to create instance of \"{typeof(ITask).Name}\"");
+                    continue;
+                }
+                var tsk = new Internal.Tasks.Record<A>(new(domain), client, Types.DnsRecordType.A);
+                ITask.Enqueue(tsk);
+            }
+
+            Tasks.HandleTasks();
+
+            /*records ??= [.. Types.RecordTypes];
             records.Sort();
 
             if (dns != null)
@@ -50,7 +73,9 @@ namespace DumpDNS.CLI
                 Results.DisplayResults(records, colour, depth);
             }
 
-            return 0;
+            return 0;*/
+
+            return 1;
         }
     }
 }
